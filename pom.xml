@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.caspar.eservicemall</groupId>
+	<artifactId>eservice-mall</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>eservicemall</name>
+	<packaging>pom</packaging>
+	<description>电商聚合服务</description>
+	<properties>
+		<java.version>17</java.version>
+		<spring-cloud.version>2022.0.1</spring-cloud.version>
+	</properties>
+	<modules>
+		<module>eservice-coupon</module>
+		<module>eservice-member</module>
+		<module>eservice-order</module>
+		<module>eservice-product</module>
+		<module>eservice-ware</module>
+		<module>eservice-common</module>
+    </modules>
+
+
+</project>
