@@ -55,6 +55,12 @@
             <version>2.0.2</version>
             <scope>compile</scope>
         </dependency>
+        <!--引入springcludAlibaba nacos -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
     </dependencies>
 
     <!--引入springcludAlibaba -->
@@ -63,7 +69,7 @@
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>2.2.10-RC1</version>
+                <version>2022.0.0.0-RC1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

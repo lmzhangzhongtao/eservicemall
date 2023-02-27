@@ -6,7 +6,12 @@ spring:
     password: root
     url: jdbc:mysql://192.168.56.10:3306/eservice_pms
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+  application:
+    name: eservice-product
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.56.10:8848
 mybatis-plus:
   mapper-locations: classpath:/mapper/product/*.xml
   global-config:
