@@ -5,11 +5,9 @@ import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.web.bind.annotation.*;
 
 import com.caspar.eservicemall.coupon.entity.CouponEntity;
 import com.caspar.eservicemall.coupon.service.CouponService;
@@ -27,10 +25,37 @@ import com.caspar.eservicemall.common.utils.R;
  */
 @RestController
 @RequestMapping("coupon/coupon")
+@RefreshScope
 public class CouponController {
     @Autowired
     private CouponService couponService;
 
+
+    @Value("${coupon.user.name}")
+    private String name;
+//    @Value("$(coupon.user.age)")
+//    private Integer age;
+
+     @GetMapping("/testConfig")
+    public R testConfig(){
+         return R.ok().put("name",name);
+    }
+
+
+
+    @Value("${config.info}")
+    private String config;
+    @GetMapping("/test")
+    public String hello() {
+        return config;
+    }
+
+    @RequestMapping("/member/list")
+    public R memberCoupons() {
+        CouponEntity couponEntity = new CouponEntity();
+        couponEntity.setCouponName("满100减10");
+        return R.ok().put("coupons", Arrays.asList(couponEntity));
+    }
     /**
      * 列表
      */
