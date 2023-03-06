@@ -94,6 +94,11 @@
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
             <version>4.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.crygier</groupId>
+            <artifactId>SpringUtils</artifactId>
+            <version>1.0.1</version>
+        </dependency>
     </dependencies>
 
     <!--引入springcludAlibaba -->

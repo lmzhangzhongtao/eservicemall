@@ -21,6 +21,13 @@
 		<module>eservice-common</module>
 		<module>eservice-gateway</module>
     </modules>
+    <dependencies>
+        <dependency>
+            <groupId>com.crygier</groupId>
+            <artifactId>SpringUtils</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+    </dependencies>
 
 
 </project>

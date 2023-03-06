@@ -11,3 +11,13 @@ spring:
           uri: https://www.qq.com
           predicates:
             - Query=url,qq
+
+        # 自定义后台管理服务的动态路由
+              # 路由转换：http://localhost:88/api/renren-fast => http://localhost:8080/renren-fast
+        - id: admin_route
+          uri: lb://renren-fast
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}   # 覆盖重写路径
+
