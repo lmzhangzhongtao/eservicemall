@@ -22,8 +22,8 @@ import com.caspar.eservicemall.common.utils.R;
  * 属性分组
  *
  * @author casparZheng
- * @email 824394795@gmail.com
- * @date 2023-02-27 02:24:26
+ * @email 824394795@qq.com
+ * @date 2023-03-05 10:45:01
  */
 @RestController
 @RequestMapping("product/attrgroup")
@@ -35,7 +35,7 @@ public class AttrGroupController {
      * 列表
      */
     @RequestMapping("/list")
-    //@RequiresPermissions("product:attrgroup:list")
+ //   @RequiresPermissions("product:attrgroup:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = attrGroupService.queryPage(params);
 
@@ -58,7 +58,7 @@ public class AttrGroupController {
      * 保存
      */
     @RequestMapping("/save")
-  //  @RequiresPermissions("product:attrgroup:save")
+ //   @RequiresPermissions("product:attrgroup:save")
     public R save(@RequestBody AttrGroupEntity attrGroup){
 		attrGroupService.save(attrGroup);
 
@@ -69,7 +69,7 @@ public class AttrGroupController {
      * 修改
      */
     @RequestMapping("/update")
-   // @RequiresPermissions("product:attrgroup:update")
+  //  @RequiresPermissions("product:attrgroup:update")
     public R update(@RequestBody AttrGroupEntity attrGroup){
 		attrGroupService.updateById(attrGroup);
 
@@ -80,7 +80,7 @@ public class AttrGroupController {
      * 删除
      */
     @RequestMapping("/delete")
-   // @RequiresPermissions("product:attrgroup:delete")
+  //  @RequiresPermissions("product:attrgroup:delete")
     public R delete(@RequestBody Long[] attrGroupIds){
 		attrGroupService.removeByIds(Arrays.asList(attrGroupIds));
 

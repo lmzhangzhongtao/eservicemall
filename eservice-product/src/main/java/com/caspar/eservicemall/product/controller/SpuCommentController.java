@@ -22,8 +22,8 @@ import com.caspar.eservicemall.common.utils.R;
  * 商品评价
  *
  * @author casparZheng
- * @email 824394795@gmail.com
- * @date 2023-02-27 02:24:26
+ * @email 824394795@qq.com
+ * @date 2023-03-05 10:45:01
  */
 @RestController
 @RequestMapping("product/spucomment")
@@ -35,7 +35,7 @@ public class SpuCommentController {
      * 列表
      */
     @RequestMapping("/list")
-   // @RequiresPermissions("product:spucomment:list")
+ //   @RequiresPermissions("product:spucomment:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = spuCommentService.queryPage(params);
 
@@ -58,7 +58,7 @@ public class SpuCommentController {
      * 保存
      */
     @RequestMapping("/save")
-   // @RequiresPermissions("product:spucomment:save")
+ //   @RequiresPermissions("product:spucomment:save")
     public R save(@RequestBody SpuCommentEntity spuComment){
 		spuCommentService.save(spuComment);
 
@@ -69,7 +69,7 @@ public class SpuCommentController {
      * 修改
      */
     @RequestMapping("/update")
-   // @RequiresPermissions("product:spucomment:update")
+  //  @RequiresPermissions("product:spucomment:update")
     public R update(@RequestBody SpuCommentEntity spuComment){
 		spuCommentService.updateById(spuComment);
 
@@ -80,7 +80,7 @@ public class SpuCommentController {
      * 删除
      */
     @RequestMapping("/delete")
-   // @RequiresPermissions("product:spucomment:delete")
+  //  @RequiresPermissions("product:spucomment:delete")
     public R delete(@RequestBody Long[] ids){
 		spuCommentService.removeByIds(Arrays.asList(ids));
 

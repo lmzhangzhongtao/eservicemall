@@ -1,21 +1,24 @@
-server:
-  port: 8000
-spring:
-  datasource:
-    username: root
-    password: root
-    url: jdbc:mysql://192.168.56.10:3306/eservice_ums
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  application:
-    name: eservice-member
-  cloud:
-    nacos:
-      discovery:
-        server-addr: 192.168.56.10:8848
-mybatis-plus:
-  mapper-locations: classpath:/mapper/member/*.xml
-  global-config:
-    db-config:
-      id-type: auto
-
-
+#server:
+#  port: 8000
+#spring:
+#  datasource:
+#    username: root
+#    password: root
+#    url: jdbc:mysql://192.168.56.10:3306/eservice_ums
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#  application:
+#    name: eservice-member
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 192.168.56.10:8848
+##        username: nacos
+##        password: nacos
+#      server-addr: 192.168.56.10:8848
+#
+#mybatis-plus:
+#  mapper-locations: classpath:/mapper/member/*.xml
+#  global-config:
+#    db-config:
+#      id-type: auto
+#

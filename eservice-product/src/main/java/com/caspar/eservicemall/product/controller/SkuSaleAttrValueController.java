@@ -22,8 +22,8 @@ import com.caspar.eservicemall.common.utils.R;
  * sku销售属性&值
  *
  * @author casparZheng
- * @email 824394795@gmail.com
- * @date 2023-02-27 02:24:26
+ * @email 824394795@qq.com
+ * @date 2023-03-05 10:45:01
  */
 @RestController
 @RequestMapping("product/skusaleattrvalue")
@@ -35,7 +35,7 @@ public class SkuSaleAttrValueController {
      * 列表
      */
     @RequestMapping("/list")
-   // @RequiresPermissions("product:skusaleattrvalue:list")
+ //   @RequiresPermissions("product:skusaleattrvalue:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = skuSaleAttrValueService.queryPage(params);
 
@@ -47,7 +47,7 @@ public class SkuSaleAttrValueController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    //@RequiresPermissions("product:skusaleattrvalue:info")
+  //  @RequiresPermissions("product:skusaleattrvalue:info")
     public R info(@PathVariable("id") Long id){
 		SkuSaleAttrValueEntity skuSaleAttrValue = skuSaleAttrValueService.getById(id);
 
@@ -58,7 +58,7 @@ public class SkuSaleAttrValueController {
      * 保存
      */
     @RequestMapping("/save")
-   // @RequiresPermissions("product:skusaleattrvalue:save")
+ //   @RequiresPermissions("product:skusaleattrvalue:save")
     public R save(@RequestBody SkuSaleAttrValueEntity skuSaleAttrValue){
 		skuSaleAttrValueService.save(skuSaleAttrValue);
 
@@ -69,7 +69,7 @@ public class SkuSaleAttrValueController {
      * 修改
      */
     @RequestMapping("/update")
-   // @RequiresPermissions("product:skusaleattrvalue:update")
+  //  @RequiresPermissions("product:skusaleattrvalue:update")
     public R update(@RequestBody SkuSaleAttrValueEntity skuSaleAttrValue){
 		skuSaleAttrValueService.updateById(skuSaleAttrValue);
 
@@ -80,7 +80,7 @@ public class SkuSaleAttrValueController {
      * 删除
      */
     @RequestMapping("/delete")
-   // @RequiresPermissions("product:skusaleattrvalue:delete")
+  //  @RequiresPermissions("product:skusaleattrvalue:delete")
     public R delete(@RequestBody Long[] ids){
 		skuSaleAttrValueService.removeByIds(Arrays.asList(ids));
 

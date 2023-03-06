@@ -22,8 +22,8 @@ import com.caspar.eservicemall.common.utils.R;
  * sku信息
  *
  * @author casparZheng
- * @email 824394795@gmail.com
- * @date 2023-02-27 02:28:38
+ * @email 824394795@qq.com
+ * @date 2023-03-05 10:45:01
  */
 @RestController
 @RequestMapping("product/skuinfo")

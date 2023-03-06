@@ -22,8 +22,8 @@ import com.caspar.eservicemall.common.utils.R;
  * spu图片
  *
  * @author casparZheng
- * @email 824394795@gmail.com
- * @date 2023-02-27 02:24:26
+ * @email 824394795@qq.com
+ * @date 2023-03-05 10:45:01
  */
 @RestController
 @RequestMapping("product/spuimages")
@@ -35,7 +35,7 @@ public class SpuImagesController {
      * 列表
      */
     @RequestMapping("/list")
-   // @RequiresPermissions("product:spuimages:list")
+ //   @RequiresPermissions("product:spuimages:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = spuImagesService.queryPage(params);
 
@@ -47,7 +47,7 @@ public class SpuImagesController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-   // @RequiresPermissions("product:spuimages:info")
+  //  @RequiresPermissions("product:spuimages:info")
     public R info(@PathVariable("id") Long id){
 		SpuImagesEntity spuImages = spuImagesService.getById(id);
 
@@ -58,7 +58,7 @@ public class SpuImagesController {
      * 保存
      */
     @RequestMapping("/save")
-  //  @RequiresPermissions("product:spuimages:save")
+ //   @RequiresPermissions("product:spuimages:save")
     public R save(@RequestBody SpuImagesEntity spuImages){
 		spuImagesService.save(spuImages);
 
@@ -80,7 +80,7 @@ public class SpuImagesController {
      * 删除
      */
     @RequestMapping("/delete")
-   // @RequiresPermissions("product:spuimages:delete")
+  //  @RequiresPermissions("product:spuimages:delete")
     public R delete(@RequestBody Long[] ids){
 		spuImagesService.removeByIds(Arrays.asList(ids));
 

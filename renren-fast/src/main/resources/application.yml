@@ -11,6 +11,7 @@ server:
     context-path: /renren-fast
 
 spring:
+
   # 环境 dev|test|prod
   profiles:
     active: dev
@@ -42,7 +43,10 @@ spring:
       matching-strategy: ANT_PATH_MATCHER
 #  resources:
 #    add-mappings: false
-
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.56.10:8848
 
 #mybatis
 mybatis-plus:
