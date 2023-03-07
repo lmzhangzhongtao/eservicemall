@@ -31,6 +31,17 @@ public class BrandController {
     @Autowired
     private BrandService brandService;
 
+
+    /**
+     * 修改状态
+     */
+    @RequestMapping("/update/status")
+    //@RequiresPermissions("product:brand:update")
+    public R updateStatus(@RequestBody BrandEntity brand){
+        brandService.updateById(brand);
+        return R.ok();
+    }
+
     /**
      * 列表
      */

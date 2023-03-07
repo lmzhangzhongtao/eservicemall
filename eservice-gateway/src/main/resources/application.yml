@@ -11,7 +11,14 @@ spring:
           uri: https://www.qq.com
           predicates:
             - Query=url,qq
-
+        # 商品服务路由
+        # 路由转换：http://localhost:88/api/product/category/list/tree => http://localhost:10000/product/category/list/tree
+        - id: product_route
+          uri: lb://eservice-product
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - RewritePath=/api/product/(?<segment>.*),/product/$\{segment}
         # 自定义后台管理服务的动态路由
               # 路由转换：http://localhost:88/api/renren-fast => http://localhost:8080/renren-fast
         - id: admin_route
