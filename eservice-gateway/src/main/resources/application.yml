@@ -19,6 +19,18 @@ spring:
             - Path=/api/product/**
           filters:
             - RewritePath=/api/product/(?<segment>.*),/product/$\{segment}
+
+
+         ### 第三方服务路由
+         ##路由转换 http://localhost:88/api/thirdparty/oss/policy  => http://localhost:30000/oss/policy
+        - id: eservice-third-party
+          uri: lb://eservice-third-party
+          predicates:
+            - Path=/api/thirdparty/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}   # 覆盖重写路径
+
+
         # 自定义后台管理服务的动态路由
               # 路由转换：http://localhost:88/api/renren-fast => http://localhost:8080/renren-fast
         - id: admin_route

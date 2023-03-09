@@ -55,6 +55,13 @@
             <version>2.0.2</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
         <!--引入springcludAlibaba nacos -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
