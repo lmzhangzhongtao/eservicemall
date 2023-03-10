@@ -20,6 +20,7 @@
 		<module>eservice-ware</module>
 		<module>eservice-common</module>
 		<module>eservice-gateway</module>
+		<module>eservice-third-party</module>
     </modules>
     <dependencies>
         <dependency>
