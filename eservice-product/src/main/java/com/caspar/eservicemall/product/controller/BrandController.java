@@ -21,7 +21,6 @@ import com.caspar.eservicemall.common.utils.PageUtils;
 import com.caspar.eservicemall.common.utils.R;
 
 
-
 /**
  * 品牌
  *
@@ -41,7 +40,7 @@ public class BrandController {
      */
     @RequestMapping("/update/status")
     //@RequiresPermissions("product:brand:update")
-    public R updateStatus(@Validated(UpdateStatusGroup.class) @RequestBody BrandEntity brand){
+    public R updateStatus(@Validated({UpdateStatusGroup.class}) @RequestBody BrandEntity brand){
         brandService.updateById(brand);
         return R.ok();
     }
@@ -74,7 +73,7 @@ public class BrandController {
      */
     @RequestMapping("/save")
  //   @RequiresPermissions("product:brand:save")
-    public R save(@Validated(AddGroup.class) @RequestBody BrandEntity brand){
+    public R save(@Validated({AddGroup.class}) @RequestBody BrandEntity brand){
 //        if(result.hasErrors()){
 //            Map<String,String> map = new HashMap<>();
 //            //1、获取校验的错误结果
@@ -101,7 +100,7 @@ public class BrandController {
      */
     @RequestMapping("/update")
   //  @RequiresPermissions("product:brand:update")
-    public R update(@Validated(UpdateGroup.class) @RequestBody BrandEntity brand){
+    public R update(@Validated({UpdateGroup.class}) @RequestBody BrandEntity brand){
 		brandService.updateById(brand);
 
         return R.ok();

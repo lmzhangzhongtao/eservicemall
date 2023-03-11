@@ -10,10 +10,10 @@ import com.caspar.eservicemall.common.validator.ListValue;
 import com.caspar.eservicemall.common.validator.group.AddGroup;
 import com.caspar.eservicemall.common.validator.group.UpdateGroup;
 import com.caspar.eservicemall.common.validator.group.UpdateStatusGroup;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 
-import javax.validation.constraints.*;
 
 /**
  * 品牌
