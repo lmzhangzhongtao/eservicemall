@@ -28,7 +28,7 @@ spring:
           predicates:
             - Path=/api/thirdparty/**
           filters:
-            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}   # 覆盖重写路径
+            - RewritePath=/api/thirdparty/(?<segment>.*),/$\{segment}   # 覆盖重写路径
 
 
         # 自定义后台管理服务的动态路由

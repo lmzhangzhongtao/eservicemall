@@ -97,12 +97,14 @@ public class BrandController {
 
     /**
      * 修改
+     * 如果分类表里的name发送变化，那么品牌表里的分类name字段应该同步变化。
      */
     @RequestMapping("/update")
   //  @RequiresPermissions("product:brand:update")
     public R update(@Validated({UpdateGroup.class}) @RequestBody BrandEntity brand){
-		brandService.updateById(brand);
-
+	//	brandService.updateById(brand);
+        // 更新brand表时，同时更改其他表的冗余数据，保证数据的一致性。
+        brandService.updateDetail(brand);
         return R.ok();
     }
 
