@@ -19,3 +19,6 @@
 #      id-type: auto
 #
 #
+spring:
+  main:
+    allow-circular-references: true  #允许循环引用

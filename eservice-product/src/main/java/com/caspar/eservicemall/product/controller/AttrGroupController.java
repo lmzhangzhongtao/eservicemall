@@ -1,16 +1,17 @@
 package com.caspar.eservicemall.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.caspar.eservicemall.product.entity.AttrEntity;
+import com.caspar.eservicemall.product.service.AttrAttrgroupRelationService;
+import com.caspar.eservicemall.product.service.AttrService;
 import com.caspar.eservicemall.product.service.CategoryService;
+import com.caspar.eservicemall.product.vo.AttrGroupRelationVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.caspar.eservicemall.product.entity.AttrGroupEntity;
 import com.caspar.eservicemall.product.service.AttrGroupService;
@@ -34,6 +35,55 @@ public class AttrGroupController {
 
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private AttrAttrgroupRelationService relationService;
+
+    @Autowired
+    AttrService attrService;
+
+
+    /**
+     * 新增关联关系的功能
+     *
+     */
+    @PostMapping("/attr/relation")
+    public R addRelation(@RequestBody List<AttrGroupRelationVo> vos){
+
+        relationService.saveBatch(vos);
+        return R.ok();
+    }
+    /**
+     * 获取属性分组关联的所有属性
+     * @param attrgroupId
+     * @return
+     */
+    @GetMapping("/{attrgroupId}/attr/relation")
+    public R attrRelation(@PathVariable("attrgroupId")Long attrgroupId){
+        List<AttrEntity> entities = attrService.getRelationAttr(attrgroupId);
+        return R.ok().put("data",entities);
+    }
+    /**
+     * 获取当前分组未关联的属性
+     * @param attrgroupId
+     * @param params
+     * @return
+     */
+    @GetMapping("/{attrgroupId}/noattr/relation")
+    public R attrNoRelation(@PathVariable("attrgroupId") Long attrgroupId,
+                            @RequestParam Map<String,Object> params){
+        PageUtils page = attrService.getNoRelationAttr(attrgroupId,params);
+        return R.ok().put("page",page);
+    }
+    /**]
+     * 删除关联关系功能
+     * @param vos
+     * @return
+     */
+    @PostMapping("/attr/relation/delete")
+    public R deleteRelation(@RequestBody AttrGroupRelationVo[] vos){
+        attrService.deleteRelation(vos);
+        return R.ok();
+    }
 
     /**
      * 列表

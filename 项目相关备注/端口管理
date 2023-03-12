@@ -1,0 +1,13 @@
+
+eservice-coupon:    7000
+eservice-member:    8000
+eservice-order:     9000
+eservice-product:   10000
+eservice-ware:      11000
+
+eservice-gateway:     88
+eservice-third-party: 30000
+renren-fast: 8080
+
+renren-fast-vue: 8081
+

@@ -2,8 +2,10 @@ package com.caspar.eservicemall.product.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.caspar.eservicemall.common.utils.PageUtils;
+import com.caspar.eservicemall.product.entity.BrandEntity;
 import com.caspar.eservicemall.product.entity.CategoryBrandRelationEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,5 +24,7 @@ public interface CategoryBrandRelationService extends IService<CategoryBrandRela
     public void updateBrand(Long brandId, String name);
 
     void updateCategory(Long catId, String name);
+
+    public List<BrandEntity> getBrandsByCatId(Long catId);
 }
 

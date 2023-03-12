@@ -29,7 +29,13 @@ spring:
             - Path=/api/thirdparty/**
           filters:
             - RewritePath=/api/thirdparty/(?<segment>.*),/$\{segment}   # 覆盖重写路径
-
+        ### 会员服务
+        - id: member_route
+          uri: lb://eservice-member
+          predicates:
+            - Path=/api/member/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
 
         # 自定义后台管理服务的动态路由
               # 路由转换：http://localhost:88/api/renren-fast => http://localhost:8080/renren-fast
