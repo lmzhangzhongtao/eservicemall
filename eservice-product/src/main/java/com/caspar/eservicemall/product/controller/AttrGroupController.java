@@ -10,6 +10,7 @@ import com.caspar.eservicemall.product.service.AttrAttrgroupRelationService;
 import com.caspar.eservicemall.product.service.AttrService;
 import com.caspar.eservicemall.product.service.CategoryService;
 import com.caspar.eservicemall.product.vo.AttrGroupRelationVo;
+import com.caspar.eservicemall.product.vo.AttrGroupWithAttrsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,6 +53,22 @@ public class AttrGroupController {
         relationService.saveBatch(vos);
         return R.ok();
     }
+
+    /**
+     * 获取分类下所有分组&关联属性
+     * @param catelogId
+     * @return
+     */
+    @GetMapping("/{catelogId}/withattr")
+    public R getAttrGroupWithAttrs(@PathVariable("catelogId")Long catelogId){
+        //1.查出当前分类下的所有属性分组
+        //2.查出每个属性分组的所有属性
+        List<AttrGroupWithAttrsVo> vos = attrGroupService.getAttrGroupWithAttrsByCatelogId(catelogId);
+        return R.ok().put("data",vos);
+    }
+
+
+
     /**
      * 获取属性分组关联的所有属性
      * @param attrgroupId

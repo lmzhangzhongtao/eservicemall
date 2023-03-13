@@ -3,7 +3,9 @@ package com.caspar.eservicemall.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.caspar.eservicemall.common.utils.PageUtils;
 import com.caspar.eservicemall.product.entity.AttrGroupEntity;
+import com.caspar.eservicemall.product.vo.AttrGroupWithAttrsVo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,5 +20,7 @@ public interface AttrGroupService extends IService<AttrGroupEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     PageUtils queryPage(Map<String, Object> params, Long catelogId);
+
+    public List<AttrGroupWithAttrsVo> getAttrGroupWithAttrsByCatelogId(Long catelogId);
 }
 

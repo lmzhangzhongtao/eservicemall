@@ -36,7 +36,13 @@ spring:
             - Path=/api/member/**
           filters:
             - RewritePath=/api/(?<segment>.*),/$\{segment}
-
+        ####库存系统
+        - id: ware_route
+          uri: lb://eservice-ware
+          predicates:
+            - Path=/api/ware/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
         # 自定义后台管理服务的动态路由
               # 路由转换：http://localhost:88/api/renren-fast => http://localhost:8080/renren-fast
         - id: admin_route

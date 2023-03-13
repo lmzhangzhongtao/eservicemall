@@ -1,9 +1,12 @@
 package com.caspar.eservicemall.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.caspar.eservicemall.product.entity.ProductAttrValueEntity;
+import com.caspar.eservicemall.product.service.ProductAttrValueService;
 import com.caspar.eservicemall.product.vo.AttrRespVo;
 import com.caspar.eservicemall.product.vo.AttrVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,23 @@ import com.caspar.eservicemall.common.utils.R;
 public class AttrController {
     @Autowired
     private AttrService attrService;
+
+    @Autowired
+    ProductAttrValueService productAttrValueService;
+
+    /**
+     * 查出商品的规格属性
+     * @param spuId
+     * @param
+     * @param
+     * @return
+     */
+    @GetMapping("/base/listforspu/{spuId}")
+    public R baseAttrlistforspu(@PathVariable("spuId")Long spuId){
+        List<ProductAttrValueEntity> entities = productAttrValueService.baseAttrlistforspu(spuId);
+        return R.ok().put("data",entities);
+    }
+
     //分页查询
     //product/attr/base/list/{catelogId}
 
@@ -81,7 +101,16 @@ public class AttrController {
 
         return R.ok();
     }
+    /**
+     * 修改
+     */
+    @PostMapping("/update/{spuId}")
+    //@RequiresPermissions("product:attr:update")
+    public R updateSpuAttr(@PathVariable("spuId")Long spuId ,@RequestBody List<ProductAttrValueEntity> entities){
+        productAttrValueService.updateSpuAttr(spuId,entities);
 
+        return R.ok();
+    }
     /**
      * 删除
      */
