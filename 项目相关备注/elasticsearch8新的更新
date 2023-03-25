@@ -1,0 +1,8 @@
+ElasticSearch8
+新版本采用JDK17 ,并默认包含，也提供了兼容jdk8的版本
+ES8中废除了type的概念
+ES8中默认开启安全认证的
+提供了同步和异步API
+提供了EQL(事件查询语句 )
+在ES6.3以后就支持了SQL操作，Kibana中我们使用的是DSL
+ES提供了实用lambda的相关API

@@ -4,10 +4,20 @@ eservice-member:    8000
 eservice-order:     9000
 eservice-product:   10000
 eservice-ware:      11000
-
+eservice-search:    12000
 eservice-gateway:     88
 eservice-third-party: 30000
 renren-fast: 8080
 
 renren-fast-vue: 8081
+
+
+
+nacos:  8848,9848,9849
+redis:  6379
+mysql:  3306
+elasticsearch： 9200，9300
+kibana:5601
+
+nginx: 80
 

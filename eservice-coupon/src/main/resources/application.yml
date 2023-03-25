@@ -22,3 +22,8 @@
 #    db-config:
 #      id-type: auto
 #
+spring:
+  main:
+    allow-circular-references: true  #允许循环引用
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss

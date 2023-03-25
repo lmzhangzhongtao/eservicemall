@@ -47,31 +47,42 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
     @Transactional
     @Override
     public void mergePurchase(MergeVo mergeVo) {
+        boolean isCanMerge=false;  //是否可以进行合并标记
         Long purchaseId = mergeVo.getPurchaseId();
         if (purchaseId==null) {
+            //没有提交采购单，新建创建采购单
             PurchaseEntity purchaseEntity = new PurchaseEntity();
             purchaseEntity.setStatus(WareConstant.PurchaseStatusEnum.CREATED.getCode());
             purchaseEntity.setCreateTime(new Date());
             purchaseEntity.setUpdateTime(new Date());
             this.save(purchaseEntity);
             purchaseId = purchaseEntity.getId();
+            isCanMerge=true;  //新建采购单可以进行合并
+        }else{
+            PurchaseEntity purchaseEntity=this.getById(purchaseId);
+            if(purchaseEntity!=null){
+                if(purchaseEntity.getStatus().equals(WareConstant.PurchaseStatusEnum.CREATED.getCode())||purchaseEntity.getStatus().equals(WareConstant.PurchaseStatusEnum.ASSIGNED.getCode())){
+                    isCanMerge=true;
+                }
+            }
         }
-        // TODO: 2020/9/6 确认采购单状态是0,1才可以合并
-        List<Long> items = mergeVo.getItems();
-        Long finalPurchaseId = purchaseId;
-        List<PurchaseDetailEntity> collect = items.stream().map(i -> {
-            PurchaseDetailEntity detailEntity = new PurchaseDetailEntity();
-            detailEntity.setId(i);
-            detailEntity.setPurchaseId(finalPurchaseId);
-            detailEntity.setStatus(WareConstant.PurchaseDetailStatusEnum.ASSIGNED.getCode());
-            return detailEntity;
-        }).collect(Collectors.toList());
-        detailService.updateBatchById(collect);
+        if(isCanMerge){
+            List<Long> items = mergeVo.getItems();
+            Long finalPurchaseId = purchaseId;
+            List<PurchaseDetailEntity> collect = items.stream().map(i -> {
+                PurchaseDetailEntity detailEntity = new PurchaseDetailEntity();
+                detailEntity.setId(i);
+                detailEntity.setPurchaseId(finalPurchaseId);
+                detailEntity.setStatus(WareConstant.PurchaseDetailStatusEnum.ASSIGNED.getCode());
+                return detailEntity;
+            }).collect(Collectors.toList());
+            detailService.updateBatchById(collect);
 
-        PurchaseEntity purchaseEntity = new PurchaseEntity();
-        purchaseEntity.setId(purchaseId);
-        purchaseEntity.setUpdateTime(new Date());
-        this.updateById(purchaseEntity);
+            PurchaseEntity purchaseEntity = new PurchaseEntity();
+            purchaseEntity.setId(purchaseId);
+            purchaseEntity.setUpdateTime(new Date());
+            this.updateById(purchaseEntity);
+        }
     }
 
     @Override

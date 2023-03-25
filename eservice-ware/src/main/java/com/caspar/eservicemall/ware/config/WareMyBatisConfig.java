@@ -1,4 +1,4 @@
-package com.caspar.eservicemall.product.config;
+package com.caspar.eservicemall.ware.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
@@ -10,9 +10,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableTransactionManagement
-@MapperScan("com.caspar.eservicemall.product.dao")
-public class MyBatisConfig {
+@EnableTransactionManagement//开启事务功能
+@MapperScan("com.caspar.eservicemall.ware.dao")
+public class WareMyBatisConfig {
+    //设置分页插件
     // 引入分页插件
 
     /**
