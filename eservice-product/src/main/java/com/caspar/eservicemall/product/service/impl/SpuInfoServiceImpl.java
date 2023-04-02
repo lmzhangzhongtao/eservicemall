@@ -120,6 +120,9 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         this.baseMapper.insert(infoEntity);
     }
 
+    /***
+     * 商品上架
+     * */
     @Override
     public void up(Long spuId) {
         //1.查出当前的spuid对应的所有sku信息，品牌的名字
@@ -175,7 +178,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
             esModel.setAttrs(attrsList);
             return esModel;
         }).collect(Collectors.toList());
-        //5.将数据发送给es进行保存：gulimall-search
+        //5.将数据发送给es进行保存：eservice-search
         R r = searchFeignService.productStatusUp(upProducts);
         log.info(">>>>>>>>>productStatusUp>>>>result:"+ JSON.toJSONString(r));
         if (r.getCode()==0) {

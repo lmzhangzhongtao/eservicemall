@@ -26,7 +26,8 @@ PUT /es_db/_doc/1
 # 查询文档
 GET /es_db/_search
 
-
+# 查询文档
+GET /users_class_builder/_doc/1
 
 # 条件查询  全文检索
 GET /es_db/_search
@@ -159,9 +160,16 @@ GET /_analyze
 }
 
 
-#### 使用smartcn分词器进行分词
+#### 使用smartcn分词器进行分词   analysis-smartcn-8.6.2
 POST /_analyze
 {
 "analyzer": "smartcn",
 "text": "我是中国人"
 }
+
+
+
+
+##### nested  当需要保持对象数组里面的对象属性的独立性，防止被扁平化处理，需要对对应字段添加nested标记。
+
+### 文档： https://www.elastic.co/guide/en/elasticsearch/reference/8.7/nested.html

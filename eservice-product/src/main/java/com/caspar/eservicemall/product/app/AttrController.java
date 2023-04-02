@@ -1,4 +1,4 @@
-package com.caspar.eservicemall.product.controller;
+package com.caspar.eservicemall.product.app;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,7 +12,6 @@ import com.caspar.eservicemall.product.vo.AttrVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.caspar.eservicemall.product.entity.AttrEntity;
 import com.caspar.eservicemall.product.service.AttrService;
 import com.caspar.eservicemall.common.utils.PageUtils;
 import com.caspar.eservicemall.common.utils.R;

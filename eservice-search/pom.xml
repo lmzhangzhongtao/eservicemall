@@ -41,6 +41,31 @@
 			<artifactId>slf4j-reload4j</artifactId>
 		</dependency>
 
+
+
+        <!--elasticsearch java-api-client 最新8.x版本推荐使用 开始-->
+		<dependency>
+			<groupId>co.elastic.clients</groupId>
+			<artifactId>elasticsearch-java</artifactId>
+			<version>8.6.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.14.2</version>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.json</groupId>
+			<artifactId>jakarta.json-api</artifactId>
+			<version>2.1.1</version>
+		</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <!--elasticsearch java-api-client 最新8.x版本推荐使用 结束-->
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

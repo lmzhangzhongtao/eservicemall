@@ -51,4 +51,10 @@ spring:
             - Path=/api/**
           filters:
             - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}   # 覆盖重写路径
-
+        # 域名映射只能放在最后面，否则会出现错误
+        # 例如我们访问product的api路径，优先匹配到这个的话就会去直接找product
+        # 不会再路径重写了
+        - id: eservicemall_host_route
+          uri: lb://eservice-product
+          predicates:
+            - Host=**.eservicemall.com

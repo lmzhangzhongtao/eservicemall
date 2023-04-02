@@ -3,6 +3,7 @@ package com.caspar.eservicemall.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.caspar.eservicemall.common.utils.PageUtils;
 import com.caspar.eservicemall.product.entity.CategoryEntity;
+import com.caspar.eservicemall.product.vo.Catelog2Vo;
 
 import java.util.List;
 import java.util.Map;
@@ -25,5 +26,9 @@ public interface CategoryService extends IService<CategoryEntity> {
     public Long[] findCatelogPath(Long catelogId);
 
     public void updateCasCade(CategoryEntity category);
+
+    List<CategoryEntity> getLevel1Categorys();
+
+    Map<String, List<Catelog2Vo>> getCatalogJson();
 }
 

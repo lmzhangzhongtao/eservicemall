@@ -62,6 +62,21 @@
 			<version>3.5.3.1</version>
 			<scope>compile</scope>
 		</dependency>
+
+		<!--        页面渲染我们使用thymeleaf，这应该和freemarker是差不多的，都是模板引擎-->
+		<!--        优点：它是一个自然化语言，编写的语言前端可以直接使用，方便前后人员的分工合作-->
+		<!--        缺点：性能比其他模板引擎要低一点，但是我们在生产环境开启了它的缓存功能，性能也是很高的-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<!--        解决thymeleaf页面修改必须得重启服务器的问题，页面修改之后，需要重新build修改的页面-->
+		<!--        前提是需要关闭thymeleaf的缓存-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

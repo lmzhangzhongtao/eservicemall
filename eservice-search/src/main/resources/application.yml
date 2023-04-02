@@ -1,0 +1,11 @@
+## ES配置：@ConfigurationProperties(prefix = "elasticsearch") //配置的前缀
+elasticsearch:
+  username: elastic
+  passwd: elastic
+  apikey: ZVVWMVY0RUJ1Y0dJeHBiZXJHdUo6WXloU1RoOUVUejJMS0JrMy1JeTJldw==
+    # 多个IP逗号隔开
+  ip: 172.27.119.59
+  port: 9200
+  protocol: https
+
+

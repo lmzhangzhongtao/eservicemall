@@ -1,4 +1,4 @@
-package com.caspar.eservicemall.product.controller;
+package com.caspar.eservicemall.product.app;
 
 import java.util.Arrays;
 import java.util.List;

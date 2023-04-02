@@ -21,6 +21,7 @@
 		<module>eservice-common</module>
 		<module>eservice-gateway</module>
 		<module>eservice-third-party</module>
+		<module>eservice-search</module>
     </modules>
     <dependencies>
         <dependency>
