@@ -1,0 +1,23 @@
+新版本springboot已经针对lettuce进行了优化未出现堆外内存溢出的现象.
+
+这里总结一下如果使用data-redis-starter出现堆外内存溢出的解决方案
+
+出现问题：使用data-redis-starter出现堆外内存溢出即OutOfDireMemoryError
+
+因：lettuce使用netty作为网络通信框架，netty默认使用-Xmx作为堆外内存大小，调大Xmx 的大小只能延缓堆外内存溢出的时间但是一定会出现异常，
+我们也可以通过设置-Dio.netty.maxDirectMemory设置堆外内存的大小.
+
+
+
+解决方案：不能使用-Dio.netty.maxDirectMemory去调大堆外内存的大小
+
+①升级lettuce客户端 ②切换使用jedis
+
+使用jedis解决堆外内存溢出
+
+①排除lettuce的依赖
+
+
+
+###  lettuce、jedis都是操作redis的客户端。SpringBoot会再次封装redisTemplate 
+SpringBoot会将redisConnectionFactory、redisConnectionFactory封装成RedisConnectionFactory

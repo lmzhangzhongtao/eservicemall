@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @MapperScan("com.caspar.eservicemall.product.dao")
-public class ProductMyBatisConfig {
+public class MyBatisConfig {
     // 引入分页插件
 
     /**

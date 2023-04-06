@@ -26,3 +26,8 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
   thymeleaf:
     cache: false    ## 关闭缓存
+  data:
+    redis:
+      host: 192.168.218.2
+      port: 6379
+

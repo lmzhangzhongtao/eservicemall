@@ -1,0 +1,29 @@
+JMeter Address Already in use 错误解决
+
+
+windows 本身提供的端口访问机制的问题。
+Windows 提供给 TCP/IP 链接的端口为 1024-5000，并且要四分钟来循环回收他们。就导致
+我们在短时间内跑大量的请求时将端口占满了。
+1.cmd 中，用 regedit 命令打开注册表
+2.在 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters 下，
+1 .右击 parameters，添加一个新的 DWORD，名字为 MaxUserPort
+2 .然后双击 MaxUserPort，输入数值数据为 65534，基数选择十进制（如果是分布式运
+行的话，控制机器和负载机器都需要这样操作哦）
+3. 修改配置完毕之后记得重启机器才会生效
+https://support.microsoft.com/zh-cn/help/196271/when-you-try-to-connect-from-tcp-ports-grea
+ter-than-5000-you-receive-t
+TCPTimedWaitDelay：30
+
+
+
+
+堆Eden区内存优化
+
+Xmx：最大堆内存大小
+
+Xms：最小堆内存大小
+
+Xmn：新生代内存大小
+-Xmx:1024m -Xms:1024m -Xmn:512m
+
+-Xmx1024m -Xms1024m -Xmn512m
