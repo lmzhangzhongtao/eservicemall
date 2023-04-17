@@ -1,11 +1,11 @@
-spring:
-  cloud:
-    alicloud:
-      access-key: LTAI5tHs7yuA6Cv1RmJEdL9A
-      secret-key: 2sRCZGlHs47wqlATDAAoEuxT21BLKl
-      oss:
-        endpoint: oss-cn-guangzhou.aliyuncs.com
-        # 这是自定义的，需要自己来去读取
-        bucketname: eservicemall-bucket
+#spring:
+##  cloud:
+##    alicloud:
+##      access-key: LTAI5tHs7yuA6Cv1RmJEdL9A
+##      secret-key: 2sRCZGlHs47wqlATDAAoEuxT21BLKl
+##      oss:
+##        endpoint: oss-cn-guangzhou.aliyuncs.com
+##        # 这是自定义的，需要自己来去读取
+##        bucketname: eservicemall-bucket
 server:
   port: 30000

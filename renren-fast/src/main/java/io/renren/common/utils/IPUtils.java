@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author Mark sunlightcs@gmail.com
  */
 public class IPUtils {
-	private static Logger logger = LoggerFactory.getLogger(IPUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(IPUtils.class);
 
 	/**
 	 * 获取IP地址

@@ -528,7 +528,36 @@ class EserviceSearchApplicationTests {
 		System.out.println(response);
 	}
 
+	@Test
+	public void TestDSL() throws IOException{
+//		User user=new User();
+//		user.setUserName("casparZheng");
+//		user.setAge(30);
+//		user.setGender("男");
+//		IndexResponse response = client.index(i -> i
+//				.index("users")
+//				.id("1")
+//				.document(user)
+//		);
+		SearchResponse<Poet> response = client.search(searchRequestBuilder -> searchRequestBuilder
+						.index(INDEX_NAME)
+						.query(queryBuilder -> queryBuilder
+								.match(matchQueryBuilder -> matchQueryBuilder
+										.field("success").query("思想")))
+						.highlight(highlightBuilder -> highlightBuilder
+								.preTags("<span color='red'>")
+								.postTags("</span>")
+								.fields("success", highlightFieldBuilder -> highlightFieldBuilder))
+				, Poet.class);
 
+        String index_name="eservice_product";
+		client.search(searchRequestBuilder->searchRequestBuilder.index(index_name), Poet.class);
+
+
+
+
+		//System.out.println(response);
+	}
 
 
 
@@ -583,5 +612,15 @@ class EserviceSearchApplicationTests {
 		private String city;
 
 		private String state;
+
+
+
+
+
+
+
+
+
+
 
 }

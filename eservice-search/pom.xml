@@ -66,6 +66,18 @@
         </dependency>
         <!--elasticsearch java-api-client 最新8.x版本推荐使用 结束-->
 
+		<!--模板引擎thymeleaf-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<!--devtools热启动，实现不重启服务实时更新页面-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

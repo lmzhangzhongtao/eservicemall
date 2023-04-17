@@ -29,7 +29,7 @@ import java.util.Date;
  * @author Mark sunlightcs@gmail.com
  */
 public class ScheduleJob extends QuartzJobBean {
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {

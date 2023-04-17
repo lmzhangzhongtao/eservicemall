@@ -4,17 +4,17 @@
 #  datasource:
 #    username: root
 #    password: root
-#    url: jdbc:mysql://192.168.56.10:3306/eservice_sms
+#    url: jdbc:mysql://192.168.218.2:3306/eservice_sms
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 #  application:
 #    name: eservice-coupon
 #  cloud:
 #    nacos:
 #      discovery:
-#        server-addr: 192.168.56.10:8848
+#        server-addr: 192.168.218.2:8848
 ##        username: nacos
 ##        password: nacos
-#      server-addr: 192.168.56.10:8848
+#      server-addr: 192.168.218.2:8848
 #
 #mybatis-plus:
 #  mapper-locations: classpath:/mapper/coupon/*.xml

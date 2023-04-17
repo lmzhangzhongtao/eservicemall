@@ -38,9 +38,15 @@ docker run --name elasticsearch -p 9200:9200 -p 9300:9300 \
 
 
 
+修改密码
+docker exec -it elasticsearch /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -i
 
 
+获取token
+docker exec -it elasticsearch /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana
 
+
+复制证书
 
 
 
@@ -49,6 +55,9 @@ docker run --name elasticsearch -p 9200:9200 -p 9300:9300 \
 ### 运行命令
 docker run --name kibana --net elastic  -p 5601:5601 -d kibana:8.6.2
 
+
+
+## docker run --name kibana --net elastic -v /mydata/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml -p 5601:5601 -d kibana:8.6.2
 
 
 

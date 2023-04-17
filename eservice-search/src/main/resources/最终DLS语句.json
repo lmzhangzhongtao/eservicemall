@@ -1,0 +1,85 @@
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "skuTitle": "iphone"
+          }
+        }
+      ],
+      "filter": [
+        {
+          "term": {
+            "catalogId": {
+              "value": "225"
+            }
+          }
+        },
+        {
+          "terms": {
+            "brandId": [
+              "8",
+              "9"
+            ]
+          }
+        },
+        {
+          "nested": {
+            "path": "attrs",
+            "query": {
+              "bool": {
+                "must": [
+                  {
+                    "term": {
+                      "attrs.attrId": {
+                        "value": "1"
+                      }
+                    }
+                  },
+                  {
+                    "terms": {
+                      "attrs.attrValue": [
+                        "5G",
+                        "4G"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "term": {
+            "hasStock": {
+              "value": "false"
+            }
+          }
+        },
+        {
+          "range": {
+            "skuPrice": {
+              "gte": 4999,
+              "lte": 5400
+            }
+          }
+        }
+      ]
+    }
+  },
+  "sort": [
+    {
+      "skuPrice": {
+        "order": "desc"
+      }
+    }
+  ],
+  "from": 0,
+  "size": 10,
+   "highlight": {
+     "fields": {"skuTitle":{}},
+     "pre_tags": "<b style='color:red'>",
+     "post_tags": "</b>"
+   }
+}

@@ -26,7 +26,7 @@ import java.util.Date;
 @ConfigurationProperties(prefix = "renren.jwt")
 @Component
 public class JwtUtils {
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private String secret;
     private long expire;

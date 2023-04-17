@@ -65,7 +65,7 @@ public class SysRoleController extends AbstractController {
 		if(getUserId() != Constant.SUPER_ADMIN){
 			map.put("create_user_id", getUserId());
 		}
-		List<SysRoleEntity> list = (List<SysRoleEntity>) sysRoleService.listByMap(map);
+		List<SysRoleEntity> list = sysRoleService.listByMap(map);
 		
 		return R.ok().put("list", list);
 	}

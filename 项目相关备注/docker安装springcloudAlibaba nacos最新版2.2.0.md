@@ -41,3 +41,8 @@ docker ps -a
  //  sudo docker run -d --name nacos  --restart=always   -p 8848:8848  -p 9848:9848 -p 9849:9849 -e PREFER_HOST_MODE=hostname -e MODE=standalone nacos/nacos-server
 sudo docker run --name nacos -d -p 8848:8848 -p 9848:9848 -p 9849:9849 --privileged=true --restart=always -e MODE=standalone -e PREFER_HOST_MODE=hostname nacos/nacos-server
 ————————————————
+### 新版本启动命令，需要手动设置
+##  NACOS_AUTH_IDENTITY_KEY
+##  NACOS_AUTH_IDENTITY_VALUE
+### NACOS_AUTH_TOKEN
+docker run -d --name nacos -p 8848:8848 -p 9848:9848 -p 9849:9849 --restart=always nacos/nacos-server  -e PREFER_HOST_MODE=hostname -e MODE=standalone -e NACOS_AUTH_ENABLE=true -e NACOS_AUTH_TOKEN=8b92c609089f74db3c5ee04bd7d4d89e8b92c609089f74db3c5ee04bd7d4d89e -e NACOS_AUTH_IDENTITY_KEY=xxx -e NACOS_AUTH_IDENTITY_VALUE=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjpbeyJ4eHh4IjoieXl5In1dLCJpYXQiOjE2Nzk1NzU0NzIsImV4cCI6MTY3OTUwMDc5OSwiYXVkIjoiIiwiaXNzIjoiIiwic3ViIjoiIn0.nhN_hKcnjlX0QW-kQj2beLehBzrQnB1IhhJZe2WO-c0
