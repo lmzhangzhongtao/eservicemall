@@ -764,7 +764,7 @@
         </div>
         <div class="JD_ipone_one c">
             <!--遍历面包屑功能-->
-            <!--            <a th:href="${nav.link}" th:each="nav:${result.navs}"><span th:text="${nav.navName}"></span>:<span th:text="${nav.navValue}"></span>x</a>-->
+<!--            <a th:href="${nav.link}" th:each="nav:${result.navs}"><span th:text="${nav.navName}"></span>:<span th:text="${nav.navValue}"></span>x</a>-->
         </div>
         <i><img src="/static/search/image/right-@1x.png" alt=""></i>
     </div>
@@ -818,13 +818,13 @@
                         <span>分类：</span>
                     </div>
                     <div class="sl_value">
-                        <ul>
-                            <li th:each="catalog:${result.catalogs}">
-                                <a href="/static/search/#" th:href="${'javascript:searchProduct(&quot;catalog3Id&quot;,'+catalog.catalogId+')'}"
-                                   th:text="${catalog.catalogName}">
-                                </a>
-                            </li>
-                        </ul>
+                            <ul>
+                                <li th:each="catalog:${result.catalogs}">
+                                    <a href="/static/search/#" th:href="${'javascript:searchProduct(&quot;catalog3Id&quot;,'+catalog.catalogId+')'}"
+                                       th:text="${catalog.catalogName}">
+                                    </a>
+                                </li>
+                            </ul>
                     </div>
                     <div class="sl_ext">
                         <a href="/static/search/#">
@@ -848,7 +848,7 @@
                         <ul>
                             <li th:each="val:${attr.getAttrValue()}">
                                 <a href="/static/search/#" th:href="${'javascript:searchProduct(&quot;attrs&quot;,&quot;'+attr.attrId +'_'+val+'&quot;)'}"
-                                   th:text="${val}">5.56英寸及以上</a></li>
+                                                                        th:text="${val}">5.56英寸及以上</a></li>
                         </ul>
                     </div>
                 </div>
@@ -1187,9 +1187,9 @@
                             </p>
                             <p class="tab_JE">
                                 <a href="/static/search/#" th:utext="${product.skuTitle}">
-<!--                                    Apple iPhone 7 Plus (A1661) 32G 黑色 移动联通电信4G手机-->
+                                    Apple iPhone 7 Plus (A1661) 32G 黑色 移动联通电信4G手机
                                 </a>
-                            </p>
+                                </p>
                             <p class="tab_PI">已有<span>11万+</span>热门评价
                                 <a href="/static/search/#">二手有售</a>
                             </p>
@@ -1217,9 +1217,9 @@
                                 <a th:attr="pn=${result.pageNum - 1}" class="page_a" th:if="${result.pageNum>1}">
                                     < 上一页
                                 </a>
-                                <!--                                <a th:attr="pn=${nav},style=${nav == result.pageNum ? 'border: 0;color:#ee2222;background: #fff': ''}"-->
-                                <!--                                   class="page_a"-->
-                                <!--                                   th:each="nav:${result.pageNavs}">[[${nav}]]</a>-->
+<!--                                <a th:attr="pn=${nav},style=${nav == result.pageNum ? 'border: 0;color:#ee2222;background: #fff': ''}"-->
+<!--                                   class="page_a"-->
+<!--                                   th:each="nav:${result.pageNavs}">[[${nav}]]</a>-->
                                 <a th:attr="pn=${result.pageNum + 1}" class="page_a"
                                    th:if="${result.pageNum<result.totalPages}">
                                     下一页 >

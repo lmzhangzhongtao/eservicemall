@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * 商城检索
@@ -21,12 +24,26 @@ public class SearchController {
     @Autowired
     MallSearchServiceImpl mallSearchService;
 
-    @GetMapping("/list.html")
-    public String listPage(SearchParam param, Model model, HttpServletRequest request) {
+    @GetMapping(value = {"list.html"})
+    public String listPage(@RequestParam SearchParam param, Model model, HttpServletRequest request) throws IOException {
 
-//        param.set_queryString(request.getQueryString());
-//        SearchResult result = mallSearchService.search(param);
-//        model.addAttribute("result", result);
+        System.out.println("list！！！！！！");
+        param.set_queryString(request.getQueryString());
+        //1.根据传递来的页面的查询参数，去es中检索商品
+        SearchResult result = mallSearchService.search(param);
+        model.addAttribute("result", result);
         return "list";
     }
+    @GetMapping(value = {"/","index.html"})
+    private String indexPage(Model model) throws IOException {
+        System.out.println("index.html!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        //1.根据传递来的页面的查询参数，去es中检索商品
+        SearchParam param=new SearchParam();
+        param.setKeyword("华为");
+        SearchResult result = mallSearchService.search(param);
+        model.addAttribute("result", result);
+
+        return "index";
+    }
+
 }

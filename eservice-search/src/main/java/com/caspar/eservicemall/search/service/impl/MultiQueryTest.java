@@ -165,9 +165,19 @@ public class MultiQueryTest {
         );
         aggregationMap.put("catalog_agg",catalog_agg);
         //3.属性聚合
-        NestedAggregation attr_agg=NestedAggregation.of(
-                nestedAttrAggbuilder->nestedAttrAggbuilder.path("attrs").name("attr_agg")
+        Aggregation attr_agg=Aggregation.of(
+                attrAggBuilder->attrAggBuilder.nested(
+                        nestAttrAggBuilder->nestAttrAggBuilder.path("attrs").name("attr_agg")
+                ).aggregations("attr_id_agg",attrIdAggBuilder->attrIdAggBuilder.terms(
+                        attrAggTermsBuilder->attrAggTermsBuilder.field("attrs.attrId").size(10)
+                ).aggregations("attr_name_agg",attrNameAggBuilder->attrNameAggBuilder.terms(
+                        attrNameAggTermsBuilder->attrNameAggTermsBuilder.field("attrs.attrName").size(10)
+                )).aggregations("attr_value_agg",attrValueAggBuilder->attrValueAggBuilder.terms(
+                        attrValueAggTermsBuilder->attrValueAggTermsBuilder.field("attrs.attrValue").size(10)
+                )))
         );
+        aggregationMap.put("attr_agg",attr_agg);
+
 
 
 
