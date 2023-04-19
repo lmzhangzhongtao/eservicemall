@@ -61,7 +61,10 @@ docker exec -it elasticsearch /usr/share/elasticsearch/bin/elasticsearch-create-
 
 
 复制证书
+docker cp elasticsearch:/usr/share/elasticsearch/config/certs/http_ca.crt .
 
+最后执行这句验证
+curl --cacert http_ca.crt -u elastic https://localhost:9200
 
 
 ##### 安装Kibana(可视化界面)
