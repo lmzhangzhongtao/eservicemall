@@ -268,10 +268,7 @@ public class MallSearchServiceImpl implements MallSearchService {
            //2.执行检索请求
              SearchResponse<Object> response = client.search(searchRequest, Object.class);
              //3.分析响应数据封装成我们需要的格式
-             System.out.println("222222");
              result =buildSearchResult(response,param);
-
-
          }catch (Exception e){
              e.printStackTrace();
          }
@@ -406,7 +403,8 @@ public class MallSearchServiceImpl implements MallSearchService {
                 //拿到所有的查询条件，去掉当前
                 //字符编码转换
                 String replace = replaceQueryString(param, attr,"attrs");
-                navVo.setLink("http://search.gulimall.com/list.html?"+replace);
+             //   navVo.setLink("http://search.gulimall.com/list.html?"+replace);
+                navVo.setLink("http://search.eservicemall.com/list.html?"+replace);
                 return navVo;
             }).collect(Collectors.toList());
             result.setNavs(collect);

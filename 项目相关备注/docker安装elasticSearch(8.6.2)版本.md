@@ -27,15 +27,29 @@ docker pull docker.elastic.co/elasticsearch/elasticsearch:8.6.2
 docker network create elastic
 
 
+[//]: # (docker run --name elasticsearch -p 9200:9200 -p 9300:9300 \)
+
+[//]: # (-e "discovery.type=single-node" \)
+
+[//]: # (-e ES_JAVA_OPTS="-Xms128m -Xmx512m" \)
+
+[//]: # (--net elastic \)
+
+[//]: # (-v /mydata/elasticsearch/data:/usr/share/elasticsearch/data \)
+
+[//]: # (-v /mydata/elasticsearch/plugins:/usr/share/elasticsearch/plugins \)
+
+[//]: # (-d elasticsearch:8.6.2)
+
+
+###  不可以挂载data,config目录，去掉config和data文件夹的映射命令，因为该命令会覆盖自动生成的配置文件和数据，导致无法生成用户名和密码
+
 docker run --name elasticsearch -p 9200:9200 -p 9300:9300 \
 -e "discovery.type=single-node" \
 -e ES_JAVA_OPTS="-Xms128m -Xmx512m" \
 --net elastic \
--v /mydata/elasticsearch/data:/usr/share/elasticsearch/data \
 -v /mydata/elasticsearch/plugins:/usr/share/elasticsearch/plugins \
 -d elasticsearch:8.6.2
-
-
 
 
 修改密码

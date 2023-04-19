@@ -402,7 +402,7 @@
         <a href="http://gulimall.com"><img src="/static/search/./image/logo1.jpg" alt=""></a>
     </div>
     <div class="header_form">
-        <input id="keyword_input" type="text" placeholder="手机" />
+        <input id="keyword_input" type="text" placeholder=""  th:value="${param.keyword}"/>
         <a href="javascript:searchByKeyword();">搜索</a>
     </div>
     <div class="header_ico">
@@ -1858,7 +1858,15 @@
         if (href.indexOf("pageNum") !== -1) {
             location.href = replaceParamVal(href, "pageNum", pn);
         } else {
-            location.href = location.href + "&pageNum=" + pn;
+           // location.href = location.href + "&pageNum=" + pn;
+           if(href.indexOf("?") !== -1){
+               //带了?号，直接拼&pageNum
+               location.href = location.href + "&pageNum=" + pn;
+           }else{
+              //没带?号，需拼成?pageNum
+               location.href = location.href + "?pageNum=" + pn;
+           }
+
         }
         return false;
     });

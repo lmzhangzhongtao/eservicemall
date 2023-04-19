@@ -792,7 +792,7 @@
                                     <a href="/static/search/#" th:href="${'javascript:searchProduct(&quot;brandId&quot;,'+brand.brandId+')'}">
                                         <img th:src="${brand.brandImg}" alt="">
                                         <div th:text="${brand.brandName}">
-                                            华为(HUAWEI)
+                                        华为22(HUAWEI)
                                         </div>
                                     </a>
                                 </li>
@@ -1847,6 +1847,7 @@
         // } else {
         //     location.href = location.href + "?" + name + "=" + value;
         // }
+        console.log("searchProduct:::");
         location.href = replaceParamVal(location.href,name,value,true)
     }
     function searchByKeyword() {
