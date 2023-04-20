@@ -31,3 +31,9 @@ spring:
       host: 192.168.218.2
       port: 6379
 
+#### 线程池配置
+eservicemall:
+  thread:
+    core-size: 20
+    max-size: 200
+    keep-alive-time: 10

@@ -25,11 +25,12 @@ public class ProductSaveServiceImpl implements ProductSaveService {
         //        //保存到es
         //        //1.给es中建立索引，product 建立好映射关系
         //        //2.给es中保存这些数据
+
+        // 此处创建须用   index请求，不能使用其他请求
         List<BulkOperation> list=skuEsModels.stream().map(model->{
-            return new BulkOperation.Builder().create(builder -> builder.index(EsConstant.PRODUCT_INDEX).id(model.getSkuId().toString()).document(model)).build();
+            return new BulkOperation.Builder().index(builder -> builder.index(EsConstant.PRODUCT_INDEX).id(model.getSkuId().toString()).document(model)).build();
         }).collect(Collectors.toList());
         BulkResponse response = client.bulk(builder -> builder.index(EsConstant.PRODUCT_INDEX).operations(list));
-        //如果批量保存出现错误，进行处理
         boolean b = response.errors();
         List<String> collect = response.items().stream().map(item->{
             return item.id();

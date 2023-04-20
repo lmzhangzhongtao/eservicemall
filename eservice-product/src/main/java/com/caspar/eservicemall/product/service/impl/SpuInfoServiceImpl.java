@@ -3,6 +3,7 @@ package com.caspar.eservicemall.product.service.impl;
 import com.alibaba.cloud.commons.lang.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.caspar.eservicemall.common.constant.ProductConstant;
+import com.caspar.eservicemall.common.to.MemberPrice;
 import com.caspar.eservicemall.common.to.SkuReductionTo;
 import com.caspar.eservicemall.common.to.SpuBoundTo;
 import com.caspar.eservicemall.common.to.es.SkuEsModel;

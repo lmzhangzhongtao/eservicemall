@@ -57,7 +57,7 @@ spring:
         - id: eservicemall_host_route
           uri: lb://eservice-product
           predicates:
-            - Host=eservicemall.com
+            - Host=eservicemall.com,item.eservicemall.com
 
         - id: eservicemall_search_route
           uri: lb://eservice-search
