@@ -30,6 +30,7 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
+			<version>4.0.1</version>
 		</dependency>
 
 		<dependency>
@@ -77,6 +78,14 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<optional>true</optional>
 		</dependency>
+
+		<!--属性提示工具，spring源数据处理器，例如prefix="gulimall.thread"-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+
 		<!--Spring Cache，使用注解简化开发-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -115,6 +124,15 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.springframework.boot</groupId>
+							<artifactId>spring-boot-configuration-processor</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+
 			</plugin>
 		</plugins>
 	</build>

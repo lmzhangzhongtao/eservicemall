@@ -154,7 +154,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
             List<SpuItemAttrGroupVO> groupAttrs = attrGroupService.getAttrGroupWithAttrsBySpuId(skuInfo.getSpuId(), skuInfo.getCatalogId());
             result.setGroupAttrs(groupAttrs);
         }, executor);
-        // 等待所有任务都完成
+        // 等待所有任务都完成  skuInfoFuture不需要判断,因别的几个任务都是需要它完成才进行执行
         CompletableFuture.allOf(imagesFuture, saleAttrFuture, descFuture, groupAttrsFuture).get();
         // TODo 秒杀的暂时未处理
      //   CompletableFuture.allOf(imagesFuture, saleAttrFuture, descFuture, groupAttrsFuture, seckillSkuFuture).get();

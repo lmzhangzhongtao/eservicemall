@@ -853,19 +853,24 @@
         <div class="allquanbushop">
             <ul class="shopjieshao">
                 <li class="jieshoa" style="background: #e4393c;">
-                    <a href="/static/item/##" style="color: white;">商品介绍</a>
+<!--                    <a href="/static/item/##" style="color: white;">商品介绍</a>-->
+                    <a  style="color: white;">商品介绍</a>
                 </li>
                 <li class="baozhuang">
-                    <a href="/static/item/##">规格与包装</a>
+<!--                    <a href="/static/item/##">规格88888888与包装</a>-->
+                    <a >规格与包装</a>
                 </li>
                 <li class="baozhang">
-                    <a href="/static/item/##">售后保障</a>
+<!--                    <a href="/static/item/##">售后保障</a>-->
+                    <a >售后保障</a>
                 </li>
                 <li class="pingjia">
-                    <a href="/static/item/##">商品评价(4万+)</a>
+                    <a>商品评价(4万+)</a>
+<!--                    <a href="/static/item/##">商品评价(4万+)</a>-->
                 </li>
                 <li class="shuoming">
-                    <a href="/static/item/##">预约说明</a>
+                    <a>预约说明</a>
+<!--                    <a href="/static/item/##">预约说明</a>-->
                 </li>
 
             </ul>
@@ -877,7 +882,7 @@
                     <a href="/static/item/#li1" style="color: white;">商品介绍</a>
                 </li>
                 <li class="baozhuang">
-                    <a href="/static/item/#li2">规格与包装</a>
+                    <a href="/static/item/#li2">规格3333333333333与包装</a>
                 </li>
                 <li class="baozhang">
                     <a href="/static/item/#li3">售后保障</a>
@@ -965,7 +970,6 @@
                             <!--                            </div>-->
                         </div>
                     </li>
-                    <li class="baozhuang actives" id="li2">
                     <li class="baozhuang actives" id="li2">
                         <div class="guiGebox">
                             <div class="guiGe" th:each="group : ${item.groupAttrs}">
@@ -1372,8 +1376,7 @@
         for (let i = 1; i < skus.length; i++) {
             filterEle = $(filterEle).filter(skus[i])[0];
         }
-
-        location.href = "http://item.gulimall.com/" + filterEle + ".html";
+         location.href = "http://item.eservicemall.com/" + filterEle + ".html";
 
         return false;
     });
