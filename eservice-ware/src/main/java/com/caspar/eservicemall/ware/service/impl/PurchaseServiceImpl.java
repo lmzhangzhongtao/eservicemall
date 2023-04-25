@@ -1,6 +1,6 @@
 package com.caspar.eservicemall.ware.service.impl;
 
-import com.caspar.eservicemall.common.constant.WareConstant;
+import com.caspar.eservicemall.common.constant.ware.WareConstant;
 import com.caspar.eservicemall.ware.entity.PurchaseDetailEntity;
 import com.caspar.eservicemall.ware.service.PurchaseDetailService;
 import com.caspar.eservicemall.ware.service.WareSkuService;

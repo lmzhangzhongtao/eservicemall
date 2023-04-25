@@ -2,7 +2,7 @@ package com.caspar.eservicemall.product.service.impl;
 
 import com.alibaba.cloud.commons.lang.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.caspar.eservicemall.common.constant.ProductConstant;
+import com.caspar.eservicemall.common.constant.product.ProductConstant;
 import com.caspar.eservicemall.product.dao.AttrAttrgroupRelationDao;
 import com.caspar.eservicemall.product.dao.AttrGroupDao;
 import com.caspar.eservicemall.product.dao.CategoryDao;

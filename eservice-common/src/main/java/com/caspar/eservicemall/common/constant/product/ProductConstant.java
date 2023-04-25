@@ -1,4 +1,4 @@
-package com.caspar.eservicemall.common.constant;
+package com.caspar.eservicemall.common.constant.product;
 
 public class ProductConstant {
     public enum AttrEnum{
