@@ -31,10 +31,8 @@ public class SearchController {
         return "list";
     }
     @GetMapping(value = {"/","index.html"})
-    private String indexPage(Model model) throws IOException {
+    private String indexPage(SearchParam param, Model model, HttpServletRequest request) throws IOException {
         //1.根据传递来的页面的查询参数，去es中检索商品
-        SearchParam param=new SearchParam();
-        param.setKeyword("华为");
         SearchResult result = mallSearchService.search(param);
         model.addAttribute("result", result);
         return "index";
