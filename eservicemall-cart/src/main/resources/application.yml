@@ -1,0 +1,21 @@
+server:
+  port: 30010
+
+spring:
+  application:
+    name: eservice-cart
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  data:
+    redis:
+      port: 6379
+      host: 192.168.218.2
+
+
+eservicemall:
+  thread:
+    core-size: 20
+    max-size: 200
+    keep-alive-time: 10

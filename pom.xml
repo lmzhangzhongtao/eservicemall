@@ -22,6 +22,8 @@
 		<module>eservice-gateway</module>
 		<module>eservice-third-party</module>
 		<module>eservice-search</module>
+		<module>eservicemall-auth-server</module>
+		<module>eservicemall-cart</module>
     </modules>
     <dependencies>
         <dependency>

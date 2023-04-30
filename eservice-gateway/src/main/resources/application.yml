@@ -68,3 +68,8 @@ spring:
           uri: lb://eservicemall-auth-server
           predicates:
             - Host=auth.eservicemall.com
+
+        - id: eservicemall_cart_route
+          uri: lb://eservice-cart
+          predicates:
+            - Host=cart.eservicemall.com
