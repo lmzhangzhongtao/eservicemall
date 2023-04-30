@@ -48,6 +48,39 @@
             <artifactId>SpringUtils</artifactId>
             <version>1.0.1</version>
         </dependency>
+		<!--redis-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<!--整合springsession，实现session共享-->
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<!--amqp高级消息队列协议，rabbitmq实现-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+		<!--thymeleaf模板引擎-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<!--devtools热启动，实现不重启服务实时更新页面-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<!--属性提示工具，spring源数据处理器，例如prefix="gulimall.thread"-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
     </dependencies>
 	<dependencyManagement>
 		<dependencies>
