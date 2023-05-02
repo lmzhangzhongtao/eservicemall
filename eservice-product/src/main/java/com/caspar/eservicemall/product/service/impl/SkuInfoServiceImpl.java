@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -159,6 +160,11 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
         // TODo 秒杀的暂时未处理
      //   CompletableFuture.allOf(imagesFuture, saleAttrFuture, descFuture, groupAttrsFuture, seckillSkuFuture).get();
         return result;
+    }
+
+    @Override
+    public List<SkuInfoEntity> getByIds(Collection<Long> skuIds) {
+        return this.baseMapper.selectBatchIds(skuIds);
     }
 
 }

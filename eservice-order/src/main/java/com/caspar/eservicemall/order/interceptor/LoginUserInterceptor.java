@@ -43,7 +43,7 @@ public class LoginUserInterceptor implements HandlerInterceptor {
             // 未登录，跳转登录页面
             response.setContentType("text/html;charset=UTF-8");
             PrintWriter out = response.getWriter();
-            out.println("<script>alert('请先进行登录，再进行后续操作！');location.href='http://auth.gulimall.com/login.html'</script>");
+            out.println("<script>alert('请先进行登录，再进行后续操作！');location.href='http://auth.eservicemall.com/login.html'</script>");
             // session.setAttribute("msg", "请先进行登录");
             // response.sendRedirect("http://auth.gulimall.com/login.html");
             return false;

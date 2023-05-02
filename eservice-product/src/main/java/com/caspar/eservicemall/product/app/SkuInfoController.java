@@ -1,15 +1,14 @@
 package com.caspar.eservicemall.product.app;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.caspar.eservicemall.product.entity.SkuInfoEntity;
 import com.caspar.eservicemall.product.service.SkuInfoService;
@@ -86,5 +85,12 @@ public class SkuInfoController {
 
         return R.ok();
     }
-
+    /**
+     * 获取商品价格信息
+     */
+    @PostMapping("/info/sku/price")
+    public Map<Long, BigDecimal> getPrice(@RequestBody Collection<Long> skuIds) {
+        return skuInfoService.getByIds(skuIds).stream()
+                .collect(Collectors.toMap(SkuInfoEntity::getSkuId, SkuInfoEntity::getPrice));
+    }
 }

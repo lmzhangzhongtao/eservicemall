@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.amqp.core.DirectExchange;
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @SpringBootTest
@@ -72,14 +73,26 @@ class EserviceOrderApplicationTests {
     }
 //
     @Test
-    void sendMsg() {
+    void sendMsg() throws InterruptedException {
         // 消息对象，可以是任意类型，类必须实现serializable，消息会以序列化的方式写入流中（如果使用JSON序列化器，则不需要类实现Serializable）
         OmsOrderReturnReasonEntity message = new OmsOrderReturnReasonEntity();// 退货原因
         message.setId(1L);
         message.setCreateTime(new Date());
-        message.setName("哈哈");
+        message.setName("哈88888888888哈");
+        rabbitTemplate.setMandatory(true); //此处和spring.rabbitmq.template.mandatory=true效果一样
+//        rabbitTemplate.setReturnsCallback(returnedMessage -> {
+//            System.out.println("return执行了...");
+//            String exchange = returnedMessage.getExchange();
+//            String routingKey = returnedMessage.getRoutingKey();
+//            //String queue = returnedMessage.getMessage().getMessageProperties().getConsumerQueue();
+//            System.out.println("消息从" + exchange + "到路由key为" + routingKey);
+//        });
+
+
+
         // 消息ID
         CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
-        rabbitTemplate.convertAndSend("hello-java-exchange", "hello.java", message, correlationData);
+        rabbitTemplate.convertAndSend("hello-java-exchange", "he9llo.java", message, correlationData);
+        Thread.sleep(2000);  //// 休眠 2s
     }
 }

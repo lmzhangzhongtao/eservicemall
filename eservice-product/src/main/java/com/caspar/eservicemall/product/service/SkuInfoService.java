@@ -5,6 +5,7 @@ import com.caspar.eservicemall.common.utils.PageUtils;
 import com.caspar.eservicemall.product.entity.SkuInfoEntity;
 import com.caspar.eservicemall.product.vo.SkuItemVO;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -27,5 +28,7 @@ public interface SkuInfoService extends IService<SkuInfoEntity> {
     PageUtils queryPageByCondition(Map<String, Object> params);
 
     SkuItemVO item(Long skuId) throws ExecutionException, InterruptedException;
+
+    public List<SkuInfoEntity> getByIds(Collection<Long> skuIds);
 }
 
