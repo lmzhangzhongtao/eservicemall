@@ -1,15 +1,19 @@
 package com.caspar.eservicemall.ware.service.impl;
 
 import com.alibaba.cloud.commons.lang.StringUtils;
+import com.alibaba.fastjson.TypeReference;
+import com.caspar.eservicemall.common.constant.order.OrderConstant;
 import com.caspar.eservicemall.common.constant.ware.WareOrderTaskConstant;
 import com.caspar.eservicemall.common.exception.NoStockException;
 import com.caspar.eservicemall.common.to.mq.StockDetailTO;
 import com.caspar.eservicemall.common.to.mq.StockLockedTO;
+import com.caspar.eservicemall.common.to.order.OrderTO;
 import com.caspar.eservicemall.common.to.order.WareSkuLockTO;
 import com.caspar.eservicemall.common.utils.R;
 import com.caspar.eservicemall.common.vo.order.OrderItemVO;
 import com.caspar.eservicemall.ware.entity.WareOrderTaskDetailEntity;
 import com.caspar.eservicemall.ware.entity.WareOrderTaskEntity;
+import com.caspar.eservicemall.ware.feign.OrderFeignService;
 import com.caspar.eservicemall.ware.feign.ProductFeignService;
 import com.caspar.eservicemall.ware.vo.SkuHasStockVo;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -43,7 +47,8 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
     WareOrderTaskServiceImpl orderTaskService;
     @Autowired
     WareOrderTaskDetailServiceImpl orderTaskDetailService;
-
+    @Autowired
+    OrderFeignService orderFeignService;
     @Autowired
     RabbitTemplate rabbitTemplate;
     @Override
@@ -190,4 +195,74 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         return true;
     }
 
+    /**
+     * 库存解锁
+     */
+    @Override
+    public void unLockStock(StockLockedTO locked) throws Exception {
+        StockDetailTO taskDetailTO = locked.getDetail();// 库存工作单详情TO
+        WareOrderTaskDetailEntity taskDetail = orderTaskDetailService.getById(taskDetailTO.getId());// 库存工作单详情Entity
+        if (taskDetail != null) {
+            // 1.工作单未回滚，需要解锁
+            WareOrderTaskEntity task = orderTaskService.getById(locked.getId());// 库存工作单Entity
+            R r = orderFeignService.getOrderByOrderSn(task.getOrderSn());// 订单Entity
+            if (r.getCode() == 0) {
+                // 订单数据返回成功
+                OrderTO order = r.getData(new TypeReference<OrderTO>() {
+                });
+                if (order == null || OrderConstant.OrderStatusEnum.CANCLED.getCode().equals(order.getStatus())) {
+                    // 2.订单已回滚 || 订单未回滚已取消状态
+                    if (WareOrderTaskConstant.LockStatusEnum.LOCKED.getCode().equals(taskDetail.getLockStatus())) {
+                        // 订单已锁定状态，需要解锁（消息确认）
+                        unLockStock(taskDetailTO.getSkuId(), taskDetailTO.getWareId(), taskDetailTO.getSkuNum(), taskDetailTO.getId());
+                    } else {
+                        // 订单其他状态，不可解锁（消息确认）
+                    }
+                }
+            } else {
+                // 订单远程调用失败（消息重新入队）
+                throw new Exception();
+            }
+        } else {
+            // 3.无库存锁定工作单记录，已回滚，无需解锁（消息确认）
+        }
+    }
+    /**
+     * 库存解锁
+     * 订单解锁触发，防止库存解锁消息优先于订单解锁消息到期，导致库存无法解锁
+     */
+    @Transactional
+    @Override
+    public void unLockStock(OrderTO order) {
+        String orderSn = order.getOrderSn();// 订单号
+        // 1.根据订单号查询库存锁定工作单
+        WareOrderTaskEntity task = orderTaskService.getOrderTaskByOrderSn(orderSn);
+        // 2.按照工作单查询未解锁的库存，进行解锁
+        List<WareOrderTaskDetailEntity> taskDetails = orderTaskDetailService.list(new QueryWrapper<WareOrderTaskDetailEntity>()
+                .eq("task_id", task.getId())
+                .eq("lock_status", WareOrderTaskConstant.LockStatusEnum.LOCKED.getCode()));// 并发问题
+        // 3.解锁库存
+        for (WareOrderTaskDetailEntity taskDetail : taskDetails) {
+            unLockStock(taskDetail.getSkuId(), taskDetail.getWareId(), taskDetail.getSkuNum(), taskDetail.getId());
+        }
+    }
+    /**
+     * 库存解锁
+     * 1.sql执行释放锁定
+     * 2.更新库存工作单状态为已解锁
+     *
+     * @param skuId
+     * @param wareId
+     * @param count
+     */
+    public void unLockStock(Long skuId, Long wareId, Integer count, Long taskDetailId) {
+        // 1.库存解锁
+        baseMapper.unLockStock(skuId, wareId, count);
+
+        // 2.更新工作单的状态 已解锁
+        WareOrderTaskDetailEntity taskDetail = new WareOrderTaskDetailEntity();
+        taskDetail.setId(taskDetailId);
+        taskDetail.setLockStatus(WareOrderTaskConstant.LockStatusEnum.UNLOCKED.getCode());
+        orderTaskDetailService.updateById(taskDetail);
+    }
 }

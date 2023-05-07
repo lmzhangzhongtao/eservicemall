@@ -1,6 +1,7 @@
 package com.caspar.eservicemall.order.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.caspar.eservicemall.common.entity.order.OmsCommonOrderEntity;
 import com.caspar.eservicemall.common.utils.PageUtils;
 import com.caspar.eservicemall.common.vo.order.OrderConfirmVO;
 import com.caspar.eservicemall.common.vo.order.OrderSubmitVO;
@@ -22,5 +23,9 @@ public interface OmsOrderService extends IService<OmsOrderEntity> {
     OrderConfirmVO getOrderConfirmData() throws Exception;
 
     SubmitOrderResponseVO submitOrder(OrderSubmitVO vo) throws Exception;
+
+    OmsOrderEntity getOrderByOrderSn(String orderSn);
+
+    void closeOrder(OmsCommonOrderEntity order);
 }
 

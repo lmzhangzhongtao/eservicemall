@@ -9,6 +9,7 @@ import com.caspar.eservicemall.common.entity.order.OmsCommonOrderItemEntity;
 import com.caspar.eservicemall.common.exception.NoStockException;
 import com.caspar.eservicemall.common.exception.VerifyPriceException;
 import com.caspar.eservicemall.common.to.order.OrderCreateTO;
+import com.caspar.eservicemall.common.to.order.OrderTO;
 import com.caspar.eservicemall.common.to.order.SpuInfoTO;
 import com.caspar.eservicemall.common.to.order.WareSkuLockTO;
 import com.caspar.eservicemall.common.to.ware.SkuHasStockTO;
@@ -380,5 +381,37 @@ public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderDao, OmsOrderEntity
             orderItemEntityList.add(orderItemEntity);
         }
         orderItemService.saveBatch(orderItemEntityList);
+    }
+    /**
+     * 获取订单详情
+     */
+    @Override
+    public OmsOrderEntity getOrderByOrderSn(String orderSn) {
+        return getOne(new QueryWrapper<OmsOrderEntity>().eq("order_sn", orderSn));
+    }
+    /**
+     * 关闭订单
+     */
+    @Override
+    public void closeOrder(OmsCommonOrderEntity order) {
+       // OmsOrderEntity _order = getById(order.getId());
+        OmsOrderEntity _order=getOrderByOrderSn(order.getOrderSn());
+        if (OrderConstant.OrderStatusEnum.CREATE_NEW.getCode().equals(_order.getStatus())) {
+            // 待付款状态允许关单
+            OmsOrderEntity temp = new OmsOrderEntity();
+            temp.setId(_order.getId());
+            temp.setStatus(OrderConstant.OrderStatusEnum.CANCLED.getCode());
+            updateById(temp);
+
+            try {
+                // 发送消息给MQ
+                OrderTO orderTO = new OrderTO();
+                BeanUtils.copyProperties(orderTO, _order);
+                //TODO 持久化消息到mq_message表中，并设置消息状态为3-已抵达（保存日志记录）
+                rabbitTemplate.convertAndSend("order-event-exchange", "order.release.other", orderTO);
+            } catch (Exception e) {
+                // TODO 消息为抵达Broker，修改mq_message消息状态为2-错误抵达
+            }
+        }
     }
 }

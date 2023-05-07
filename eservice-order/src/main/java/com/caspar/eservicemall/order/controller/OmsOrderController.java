@@ -5,11 +5,7 @@ import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.caspar.eservicemall.order.entity.OmsOrderEntity;
 import com.caspar.eservicemall.order.service.OmsOrderService;
@@ -86,5 +82,12 @@ public class OmsOrderController {
 
         return R.ok();
     }
-
+    /**
+     * 获取订单详情
+     */
+    @GetMapping("/status/{orderSn}")
+    public R getOrderByOrderSn(@PathVariable("orderSn") String orderSn) {
+        OmsOrderEntity order = omsOrderService.getOrderByOrderSn(orderSn);
+        return R.ok().setData(order);
+    }
 }
