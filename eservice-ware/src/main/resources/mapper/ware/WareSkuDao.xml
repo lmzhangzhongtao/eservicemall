@@ -15,9 +15,29 @@
     <insert id="addStock">
         update wms_ware_sku set stock=stock+#{skuNum} where sku_id=#{skuId} and ware_id=#{wareId}
     </insert>
+    <update id="addStock">
+        UPDATE `wms_ware_sku` SET stock = stock + #{skuNum} WHERE sku_id = #{skuId} AND ware_id = #{wareId}
+    </update>
+
+    <update id="lockSkuStock">
+        UPDATE `wms_ware_sku` SET stock_locked = stock_locked + #{count}
+        WHERE sku_id = #{skuId} AND ware_id = #{wareId} AND stock - stock_locked &gt;= #{count}
+    </update>
+
+    <update id="unLockStock">
+        UPDATE `wms_ware_sku` SET stock_locked = stock_locked - #{count}
+        WHERE sku_id = #{skuId} AND ware_id = #{wareId}
+    </update>
     <select id="getSkuStock" resultType="java.lang.Long">
         select  sum(stock-stock_locked) from wms_ware_sku where sku_id=#{skuId}
     </select>
-
+    <select id="selectListHasSkuStock" resultMap="wareSkuMap">
+        SELECT ware_id, sku_id, stock, stock_locked FROM `wms_ware_sku`
+        WHERE sku_id IN
+        <foreach collection="skuIds" open="(" close=")" item="skuId" separator=",">
+            #{skuId}
+        </foreach>
+        AND stock - stock_locked &gt; 0
+    </select>
 
 </mapper>

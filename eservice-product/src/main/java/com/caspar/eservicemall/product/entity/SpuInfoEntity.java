@@ -29,6 +29,7 @@ public class SpuInfoEntity implements Serializable {
 	 * 商品名称
 	 */
 	private String spuName;
+
 	/**
 	 * 商品描述
 	 */
@@ -41,6 +42,12 @@ public class SpuInfoEntity implements Serializable {
 	 * 品牌id
 	 */
 	private Long brandId;
+
+	/**
+	 *品牌名称
+	 */
+	private String brandName;
+
 	/**
 	 * 
 	 */

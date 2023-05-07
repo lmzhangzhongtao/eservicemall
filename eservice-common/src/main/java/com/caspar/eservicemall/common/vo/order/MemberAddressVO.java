@@ -1,4 +1,4 @@
-package com.caspar.eservicemall.order.vo;
+package com.caspar.eservicemall.common.vo.order;
 
 import lombok.Data;
 

@@ -2,9 +2,10 @@ package com.caspar.eservicemall.order.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.caspar.eservicemall.common.utils.PageUtils;
+import com.caspar.eservicemall.common.vo.order.OrderConfirmVO;
+import com.caspar.eservicemall.common.vo.order.OrderSubmitVO;
+import com.caspar.eservicemall.common.vo.order.SubmitOrderResponseVO;
 import com.caspar.eservicemall.order.entity.OmsOrderEntity;
-import com.caspar.eservicemall.order.vo.OrderConfirmVO;
-
 import java.util.Map;
 
 /**
@@ -19,5 +20,7 @@ public interface OmsOrderService extends IService<OmsOrderEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     OrderConfirmVO getOrderConfirmData() throws Exception;
+
+    SubmitOrderResponseVO submitOrder(OrderSubmitVO vo) throws Exception;
 }
 

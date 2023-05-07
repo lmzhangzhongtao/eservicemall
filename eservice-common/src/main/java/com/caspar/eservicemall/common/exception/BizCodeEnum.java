@@ -29,7 +29,8 @@ public enum BizCodeEnum {
     PRODUCT_UP_EXCEPTION(11000,"商品上架异常"),
     USER_EXIST_EXCEPTION(15001,"存在相同的用户"),
     PHONE_EXIST_EXCEPTION(15002,"存在相同的手机号"),
-    LOGINACCT_PASSWORD_EXCEPTION(15003,"账号或密码错误");
+    LOGINACCT_PASSWORD_EXCEPTION(15003,"账号或密码错误"),
+    NO_STOCK_EXCEPTION(21000, "商品库存不足");
 
     private final int code;
     private final String msg;

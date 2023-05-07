@@ -1,0 +1,29 @@
+package com.caspar.eservicemall.order.config;
+
+import com.zaxxer.hikari.HikariDataSource;
+import io.seata.rm.datasource.DataSourceProxy;
+import jakarta.activation.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
+
+//   所有需要使用分布式事务的微服务使用Seata DataSourceProxy代理数据源
+//@Configuration
+//public class MySeataConfig {
+//
+//    @Autowired
+//    DataSourceProperties dataSourceProperties;
+//    /**
+//     * 需要将 DataSourceProxy 设置为主数据源，否则事务无法回滚
+//     */
+//    @Bean
+//    public DataSource dataSource(DataSourceProperties dataSourceProperties) {
+//        HikariDataSource dataSource = dataSourceProperties.initializeDataSourceBuilder().type(HikariDataSource.class).build();
+//        if (StringUtils.hasText(dataSourceProperties.getName())) {
+//            dataSource.setPoolName(dataSourceProperties.getName());
+//        }
+//        return (DataSource) new DataSourceProxy(dataSource);
+//    }
+//}

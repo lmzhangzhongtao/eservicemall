@@ -1,6 +1,7 @@
 package com.caspar.eservicemall.ware.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.caspar.eservicemall.common.to.order.WareSkuLockTO;
 import com.caspar.eservicemall.common.utils.PageUtils;
 import com.caspar.eservicemall.ware.entity.WareSkuEntity;
 import com.caspar.eservicemall.ware.vo.SkuHasStockVo;
@@ -22,5 +23,7 @@ public interface WareSkuService extends IService<WareSkuEntity> {
     List<SkuHasStockVo> getSkuHasStock(List<Long> skuIds);
 
     void addStock(Long skuId, Long wareId, Integer skuNum);
+
+    Boolean orderLockStock(WareSkuLockTO lockTO);
 }
 

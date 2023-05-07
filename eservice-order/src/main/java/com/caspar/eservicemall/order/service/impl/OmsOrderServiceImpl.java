@@ -1,20 +1,38 @@
 package com.caspar.eservicemall.order.service.impl;
 
 import com.alibaba.fastjson.TypeReference;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.caspar.eservicemall.common.constant.ObjectConstant;
+import com.caspar.eservicemall.common.constant.order.OrderConstant;
+import com.caspar.eservicemall.common.entity.order.OmsCommonOrderEntity;
+import com.caspar.eservicemall.common.entity.order.OmsCommonOrderItemEntity;
+import com.caspar.eservicemall.common.exception.NoStockException;
+import com.caspar.eservicemall.common.exception.VerifyPriceException;
+import com.caspar.eservicemall.common.to.order.OrderCreateTO;
+import com.caspar.eservicemall.common.to.order.SpuInfoTO;
+import com.caspar.eservicemall.common.to.order.WareSkuLockTO;
 import com.caspar.eservicemall.common.to.ware.SkuHasStockTO;
 import com.caspar.eservicemall.common.utils.R;
 import com.caspar.eservicemall.common.vo.MemberResponseVo;
+import com.caspar.eservicemall.order.entity.OmsOrderEntity;
+import com.caspar.eservicemall.order.entity.OmsOrderItemEntity;
 import com.caspar.eservicemall.order.feign.CartFeignService;
 import com.caspar.eservicemall.order.feign.MemberFeignService;
+import com.caspar.eservicemall.order.feign.ProductFeignService;
 import com.caspar.eservicemall.order.feign.WmsFeignService;
 import com.caspar.eservicemall.order.interceptor.LoginUserInterceptor;
 import com.caspar.eservicemall.order.util.TokenUtil;
-import com.caspar.eservicemall.order.vo.MemberAddressVO;
-import com.caspar.eservicemall.order.vo.OrderConfirmVO;
-import com.caspar.eservicemall.order.vo.OrderItemVO;
+import com.caspar.eservicemall.common.vo.order.*;
+import io.seata.spring.annotation.GlobalTransactional;
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -28,14 +46,17 @@ import com.caspar.eservicemall.common.utils.PageUtils;
 import com.caspar.eservicemall.common.utils.Query;
 
 import com.caspar.eservicemall.order.dao.OmsOrderDao;
-import com.caspar.eservicemall.order.entity.OmsOrderEntity;
 import com.caspar.eservicemall.order.service.OmsOrderService;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 
 @Service("omsOrderService")
 public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderDao, OmsOrderEntity> implements OmsOrderService {
+    // 提交订单共享提交数据
+    private ThreadLocal<OrderSubmitVO> confirmVoThreadLocal = new ThreadLocal<>();
     @Autowired
     ThreadPoolExecutor executor;
     @Autowired
@@ -44,6 +65,15 @@ public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderDao, OmsOrderEntity
     CartFeignService cartFeignService;
     @Autowired
     WmsFeignService wmsFeignService;
+
+    @Autowired
+    ProductFeignService productFeignService;
+
+    @Autowired
+    OmsOrderItemServiceImpl orderItemService;
+
+    @Autowired
+    RabbitTemplate rabbitTemplate;
     @Autowired
     TokenUtil tokenUtil;
     @Override
@@ -105,4 +135,250 @@ public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderDao, OmsOrderEntity
         return result;
     }
 
+    /**
+     * 创建订单
+     * GlobalTransactional：seata分布式事务，不适合高并发场景（默认基于AT实现）
+     *
+     * @param orderSubmitVO 收货地址、发票信息、使用的优惠券、备注、应付总额、令牌
+     */
+   // @GlobalTransactional
+    @Transactional
+    @Override
+    public SubmitOrderResponseVO submitOrder(OrderSubmitVO orderSubmitVO) throws Exception {
+        SubmitOrderResponseVO result = new SubmitOrderResponseVO();// 返回值
+        // 创建订单线程共享提交数据
+        confirmVoThreadLocal.set(orderSubmitVO);
+        // 1.生成订单实体对象（订单 + 订单项）
+        OrderCreateTO order = createOrder();
+        // 2.验价应付金额（允许0.01误差，前后端计算不一致）
+        if (Math.abs(orderSubmitVO.getPayPrice().subtract(order.getPayPrice()).doubleValue()) >= 0.01) {
+            // 验价不通过
+            throw new VerifyPriceException();
+        }
+        // 验价成功
+        // 3.保存订单
+        saveOrder(order);
+        // 4.库存锁定（wms_ware_sku）
+        // 封装待锁定商品项TO
+        WareSkuLockTO lockTO = new WareSkuLockTO();
+        lockTO.setOrderSn(order.getOrder().getOrderSn());
+        List<OrderItemVO> locks = order.getOrderItems().stream().map((item) -> {
+            OrderItemVO lock = new OrderItemVO();
+            lock.setSkuId(item.getSkuId());
+            lock.setCount(item.getSkuQuantity());
+            lock.setTitle(item.getSkuName());
+            return lock;
+        }).collect(Collectors.toList());
+        lockTO.setLocks(locks);// 待锁定订单项
+        //com.caspar.eservicemall.common.vo.ware
+        R response = wmsFeignService.orderLockStock(lockTO);
+        if (response.getCode() == 0) {
+            // 锁定成功
+            // TODO 5.远程扣减积分
+            // 封装响应数据返回
+            result.setOrder(order.getOrder());
+            //System.out.println(10 / 0); // 模拟订单回滚，库存不会滚
+            // 6.发送创建订单到延时队列
+            rabbitTemplate.convertAndSend("order-event-exchange", "order.create.order", order.getOrder());
+            return result;
+        } else {
+            // 锁定失败
+            throw new NoStockException("");
+        }
+    }
+    /**
+     * 封装订单实体类对象
+     * 订单 + 订单项
+     */
+    private OrderCreateTO createOrder() throws Exception {
+        OrderCreateTO result = new OrderCreateTO();// 订单
+        // 1.生成订单号
+        String orderSn = IdWorker.getTimeId();
+        // 2.生成订单实体对象
+        OmsOrderEntity orderEntity = buildOrder(orderSn);
+        // 3.生成订单项实体对象
+        List<OmsOrderItemEntity> orderItemEntities = buildOrderItems(orderSn);
+        // 4.汇总封装（封装订单价格[订单项价格之和]、封装订单积分、成长值[订单项积分、成长值之和]）
+        summaryFillOrder(orderEntity, orderItemEntities);
+
+        // 5.封装TO返回
+        //将order应用的vo 转换成common应用的vo
+        OmsCommonOrderEntity commonOrderEntity=new OmsCommonOrderEntity();
+        BeanUtils.copyProperties(commonOrderEntity,orderEntity);
+        //result.setOrder(orderEntity);
+        result.setOrder(commonOrderEntity);
+        //List<OmsCommonOrderItemEntity>
+        //转换对象
+        List<OmsCommonOrderItemEntity> commonOrderItemEntityList=new ArrayList<OmsCommonOrderItemEntity>();
+        for (OmsOrderItemEntity orderItemEntity : orderItemEntities) {
+            OmsCommonOrderItemEntity commonOrderItemEntity=new OmsCommonOrderItemEntity();
+            BeanUtils.copyProperties(commonOrderItemEntity,orderItemEntity);
+            commonOrderItemEntityList.add(commonOrderItemEntity);
+        }
+        result.setOrderItems(commonOrderItemEntityList);
+       // result.setOrderItems(orderItemEntities);
+        result.setFare(orderEntity.getFreightAmount());
+        result.setPayPrice(orderEntity.getPayAmount());// 设置应付金额
+        return result;
+    }
+    /**
+     * 生成订单实体对象
+     *
+     * @param orderSn 订单号
+     */
+    private OmsOrderEntity buildOrder(String orderSn) {
+        OmsOrderEntity orderEntity = new OmsOrderEntity();// 订单实体类
+        // 1.封装会员ID
+        MemberResponseVo member = LoginUserInterceptor.loginUser.get();// 拦截器获取登录信息
+        orderEntity.setMemberId(member.getId());
+        // 2.封装订单号
+        orderEntity.setOrderSn(orderSn);
+        // 3.封装运费
+        OrderSubmitVO orderSubmitVO = confirmVoThreadLocal.get();
+        R fare = wmsFeignService.getFare(orderSubmitVO.getAddrId());// 获取地址
+        FareVO fareVO = fare.getData(new TypeReference<FareVO>() {
+        });
+        orderEntity.setFreightAmount(fareVO.getFare());
+        // 4.封装收货地址信息
+        orderEntity.setReceiverName(fareVO.getAddress().getName());// 收货人名字
+        orderEntity.setReceiverPhone(fareVO.getAddress().getPhone());// 收货人电话
+        orderEntity.setReceiverProvince(fareVO.getAddress().getProvince());// 省
+        orderEntity.setReceiverCity(fareVO.getAddress().getCity());// 市
+        orderEntity.setReceiverRegion(fareVO.getAddress().getRegion());// 区
+        orderEntity.setReceiverDetailAddress(fareVO.getAddress().getDetailAddress());// 详细地址
+        orderEntity.setReceiverPostCode(fareVO.getAddress().getPostCode());// 收货人邮编
+        // 5.封装订单状态信息
+        orderEntity.setStatus(OrderConstant.OrderStatusEnum.CREATE_NEW.getCode());
+        // 6.设置自动确认时间
+        orderEntity.setAutoConfirmDay(OrderConstant.autoConfirmDay);// 7天
+        // 7.设置未删除状态
+        orderEntity.setDeleteStatus(ObjectConstant.BooleanIntEnum.NO.getCode());
+        // 8.设置时间
+        Date now = new Date();
+        orderEntity.setCreateTime(now);
+        orderEntity.setModifyTime(now);
+        return orderEntity;
+    }
+    /**
+     * 生成订单项实体对象
+     * 购物车每项选中商品产生一个订单项
+     */
+    private List<OmsOrderItemEntity> buildOrderItems(String orderSn) throws Exception {
+        // 封装订单项（最后确定的价格，不会再改变）
+        List<OrderItemVO> currentCartItems = cartFeignService.getCurrentCartItems();// 获取当前用户购物车所有商品
+        if (!CollectionUtils.isEmpty(currentCartItems)) {
+            // 遍历购物车商品，循环构建每个订单项
+            List<OmsOrderItemEntity> itemEntities = currentCartItems.stream()
+                    .filter(cartItem -> cartItem.getCheck())
+                    .map(cartItem -> buildOrderItem(orderSn, cartItem))
+                    .collect(Collectors.toList());
+            return itemEntities;
+        } else {
+            throw new Exception();
+        }
+    }
+    /**
+     * 生成单个订单项实体对象
+     */
+    private OmsOrderItemEntity buildOrderItem(String orderSn, OrderItemVO cartItem) {
+        OmsOrderItemEntity itemEntity = new OmsOrderItemEntity();
+        // 1.封装订单号
+        itemEntity.setOrderSn(orderSn);
+        // 2.封装SPU信息
+        R spuInfo = productFeignService.getSpuInfoBySkuId(cartItem.getSkuId());// 查询SPU信息
+        SpuInfoTO spuInfoTO = spuInfo.getData(new TypeReference<SpuInfoTO>() {
+        });
+        itemEntity.setSpuId(spuInfoTO.getId());
+        itemEntity.setSpuName(spuInfoTO.getSpuName());
+        itemEntity.setSpuBrand(spuInfoTO.getSpuName());
+        itemEntity.setCategoryId(spuInfoTO.getCatalogId());
+        // 3.封装SKU信息
+        itemEntity.setSkuId(cartItem.getSkuId());
+        itemEntity.setSkuName(cartItem.getTitle());
+        itemEntity.setSkuPic(cartItem.getImage());// 商品sku图片
+        itemEntity.setSkuPrice(cartItem.getPrice());// 这个是最新价格，购物车模块查询数据库得到
+        itemEntity.setSkuQuantity(cartItem.getCount());// 当前商品数量
+        String skuAttrsVals = String.join(";", cartItem.getSkuAttrValues());
+        itemEntity.setSkuAttrsVals(skuAttrsVals);// 商品销售属性组合["颜色:星河银","版本:8GB+256GB"]
+        // 4.优惠信息【不做】
+
+        // 5.积分信息
+        int num = cartItem.getPrice().multiply(new BigDecimal(cartItem.getCount())).intValue();// 分值=单价*数量
+        itemEntity.setGiftGrowth(num);// 成长值
+        itemEntity.setGiftIntegration(num);// 积分
+
+        // 6.价格信息
+        itemEntity.setPromotionAmount(BigDecimal.ZERO);// 促销金额
+        itemEntity.setCouponAmount(BigDecimal.ZERO);// 优惠券金额
+        itemEntity.setIntegrationAmount(BigDecimal.ZERO);// 积分优惠金额
+        BigDecimal realAmount = itemEntity.getSkuPrice().multiply(new BigDecimal(itemEntity.getSkuQuantity()))
+                .subtract(itemEntity.getPromotionAmount())
+                .subtract(itemEntity.getCouponAmount())
+                .subtract(itemEntity.getIntegrationAmount());
+        itemEntity.setRealAmount(realAmount);// 实际金额，减去所有优惠金额
+        return itemEntity;
+    }
+    /**
+     * 汇总封装订单
+     * 1.计算订单总金额
+     * 2.汇总积分、成长值
+     * 3.汇总应付总额 = 订单总金额 + 运费
+     *
+     * @param orderEntity       订单
+     * @param orderItemEntities 订单项
+     */
+    private void summaryFillOrder(OmsOrderEntity orderEntity, List<OmsOrderItemEntity> orderItemEntities) {
+        // 1.订单总额、促销总金额、优惠券总金额、积分优惠总金额
+        BigDecimal total = new BigDecimal(0);
+        BigDecimal coupon = new BigDecimal(0);
+        BigDecimal promotion = new BigDecimal(0);
+        BigDecimal integration = new BigDecimal(0);
+        // 2.积分、成长值
+        Integer giftIntegration = 0;
+        Integer giftGrowth = 0;
+        for (OmsOrderItemEntity itemEntity : orderItemEntities) {
+            total = total.add(itemEntity.getRealAmount());// 订单总额
+            coupon = coupon.add(itemEntity.getCouponAmount());// 促销总金额
+            promotion = promotion.add(itemEntity.getPromotionAmount());// 优惠券总金额
+            integration = integration.add(itemEntity.getIntegrationAmount());// 积分优惠总金额
+            giftIntegration = giftIntegration + itemEntity.getGiftIntegration();// 积分
+            giftGrowth = giftGrowth + itemEntity.getGiftGrowth();// 成长值
+        }
+        orderEntity.setTotalAmount(total);
+        orderEntity.setCouponAmount(coupon);
+        orderEntity.setPromotionAmount(promotion);
+        orderEntity.setIntegrationAmount(integration);
+        orderEntity.setIntegration(giftIntegration);// 积分
+        orderEntity.setGrowth(giftGrowth);// 成长值
+
+        // 3.应付总额
+        orderEntity.setPayAmount(orderEntity.getTotalAmount().add(orderEntity.getFreightAmount()));// 订单总额 +　运费
+    }
+
+    /**
+     * 保存订单
+     * 将封装生成的订单对象 + 订单项对象持久化到DB
+     *
+     * @param order
+     */
+    private void saveOrder(OrderCreateTO order) throws InvocationTargetException, IllegalAccessException {
+        // 1.持久化订单对象
+        OmsCommonOrderEntity commonOrderEntity = order.getOrder();
+        //转换
+        OmsOrderEntity orderEntity=new OmsOrderEntity();
+        BeanUtils.copyProperties(orderEntity,commonOrderEntity);
+        save(orderEntity);
+        // 2.持久化订单项对象
+        List<OmsCommonOrderItemEntity> itemEntities = order.getOrderItems();
+        if (CollectionUtils.isEmpty(itemEntities)) {
+            return;
+        }
+        List<OmsOrderItemEntity> orderItemEntityList=new ArrayList<OmsOrderItemEntity>();
+        for (OmsCommonOrderItemEntity commonOrderItemEntity : itemEntities) {
+            OmsOrderItemEntity orderItemEntity=new OmsOrderItemEntity();
+            BeanUtils.copyProperties(orderItemEntity,commonOrderItemEntity);
+            orderItemEntityList.add(orderItemEntity);
+        }
+        orderItemService.saveBatch(orderItemEntityList);
+    }
 }

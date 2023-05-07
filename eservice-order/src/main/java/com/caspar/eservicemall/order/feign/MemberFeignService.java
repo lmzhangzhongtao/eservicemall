@@ -1,6 +1,6 @@
 package com.caspar.eservicemall.order.feign;
 
-import com.caspar.eservicemall.order.vo.MemberAddressVO;
+import com.caspar.eservicemall.common.vo.order.MemberAddressVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

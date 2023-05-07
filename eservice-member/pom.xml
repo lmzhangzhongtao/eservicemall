@@ -49,6 +49,20 @@
             <artifactId>SpringUtils</artifactId>
             <version>1.0.1</version>
         </dependency>
+		<!--seata 分布式事务 seata-all使用1.6.1【所以启动 事务协调者1.6.1版本的】-->
+		<dependency>
+			<groupId>io.seata</groupId>
+			<artifactId>seata-all</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+
+		<!--If your project base on `Spring Boot`, you can directly use the following dependencies-->
+		<!--Notice: `seata-spring-boot-starter` has included `seata-all` dependency-->
+		<dependency>
+			<groupId>io.seata</groupId>
+			<artifactId>seata-spring-boot-starter</artifactId>
+			<version>1.6.1</version>
+		</dependency>
     </dependencies>
 	<dependencyManagement>
 		<dependencies>

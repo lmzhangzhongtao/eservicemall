@@ -1,14 +1,11 @@
-package com.caspar.eservicemall.order.config;
+package com.caspar.eservicemall.ware.config;
 
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import jakarta.annotation.PostConstruct;
-import org.springframework.amqp.core.ReturnedMessage;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 @Configuration
@@ -75,10 +72,5 @@ public class MyRabbitConfig {
                     "\nroutingKey ===> " +message.getRoutingKey());
             // TODO 修改mq_message，设置消息状态为2-错误抵达【后期定时器重发消息】
         });
-    }
-
-    public static void main(String[] args) {
-        String orderSn = IdWorker.getTimeId();
-        System.out.println("orderSn==="+orderSn);
     }
 }
