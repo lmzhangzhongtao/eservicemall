@@ -22,3 +22,11 @@
 #    db-config:
 #      id-type: auto
 #
+
+spring:
+  session:
+    storage-type: redis
+  data:
+    redis:
+      host: 192.168.218.2
+      port: 6379

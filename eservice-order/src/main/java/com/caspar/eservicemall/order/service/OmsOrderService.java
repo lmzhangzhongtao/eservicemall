@@ -5,8 +5,11 @@ import com.caspar.eservicemall.common.entity.order.OmsCommonOrderEntity;
 import com.caspar.eservicemall.common.utils.PageUtils;
 import com.caspar.eservicemall.common.vo.order.OrderConfirmVO;
 import com.caspar.eservicemall.common.vo.order.OrderSubmitVO;
+import com.caspar.eservicemall.common.vo.order.PayVO;
 import com.caspar.eservicemall.common.vo.order.SubmitOrderResponseVO;
 import com.caspar.eservicemall.order.entity.OmsOrderEntity;
+import com.caspar.eservicemall.order.entity.OmsPaymentInfoEntity;
+
 import java.util.Map;
 
 /**
@@ -27,5 +30,14 @@ public interface OmsOrderService extends IService<OmsOrderEntity> {
     OmsOrderEntity getOrderByOrderSn(String orderSn);
 
     void closeOrder(OmsCommonOrderEntity order);
+
+    /**
+     * 获取订单支付的详细信息
+     */
+    PayVO getOrderPay(String orderSn);
+
+    void handlePayResult(Integer orderStatus, Integer payCode, OmsPaymentInfoEntity paymentInfo);
+
+    PageUtils queryPageWithItem(Map<String, Object> params);
 }
 

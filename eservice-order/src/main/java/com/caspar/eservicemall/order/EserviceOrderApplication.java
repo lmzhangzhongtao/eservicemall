@@ -6,9 +6,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
-
+// 扫描组件
+@ComponentScan(basePackages = {"com.caspar.eservicemall.common.utils", "com.caspar.eservicemall.order"})
 @SpringBootApplication
 @MapperScan("com/caspar/eservicemall/order/dao")
 @EnableDiscoveryClient
@@ -20,6 +22,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @EnableAspectJAutoProxy(exposeProxy = true)
 // 开启SpringSession
 @EnableRedisHttpSession
+
 public class EserviceOrderApplication {
 
 	public static void main(String[] args) {

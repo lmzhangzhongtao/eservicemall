@@ -78,3 +78,8 @@ spring:
           uri: lb://eservice-order
           predicates:
             - Host=order.eservicemall.com
+
+        - id: eservicemall_member_route
+          uri: lb://eservice-member
+          predicates:
+            - Host=member.eservicemall.com

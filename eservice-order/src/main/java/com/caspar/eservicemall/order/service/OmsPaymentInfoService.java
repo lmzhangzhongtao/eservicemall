@@ -16,5 +16,6 @@ import java.util.Map;
 public interface OmsPaymentInfoService extends IService<OmsPaymentInfoEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
 }
 

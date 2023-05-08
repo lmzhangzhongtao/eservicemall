@@ -29,6 +29,19 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<!--thymeleaf模板引擎-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<!--devtools热启动，实现不重启服务实时更新页面-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+
 		<!--   远程调用：openfeign     -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -49,20 +62,28 @@
             <artifactId>SpringUtils</artifactId>
             <version>1.0.1</version>
         </dependency>
-		<!--seata 分布式事务 seata-all使用1.6.1【所以启动 事务协调者1.6.1版本的】-->
+		<!-- 整合SpringSession完成Session共享问题-->
 		<dependency>
-			<groupId>io.seata</groupId>
-			<artifactId>seata-all</artifactId>
-			<version>1.6.1</version>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
+		</dependency>
+		<!--引入Redis-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>io.lettuce</groupId>
+					<artifactId>lettuce-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
 		</dependency>
 
-		<!--If your project base on `Spring Boot`, you can directly use the following dependencies-->
-		<!--Notice: `seata-spring-boot-starter` has included `seata-all` dependency-->
-		<dependency>
-			<groupId>io.seata</groupId>
-			<artifactId>seata-spring-boot-starter</artifactId>
-			<version>1.6.1</version>
-		</dependency>
+
     </dependencies>
 	<dependencyManagement>
 		<dependencies>

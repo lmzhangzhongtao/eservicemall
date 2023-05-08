@@ -1,8 +1,10 @@
 package com.caspar.eservicemall.order;
 
+import com.caspar.eservicemall.common.utils.SpringUtils;
 import com.caspar.eservicemall.order.entity.OmsOrderEntity;
 import com.caspar.eservicemall.order.entity.OmsOrderReturnReasonEntity;
 import com.caspar.eservicemall.order.service.OmsOrderService;
+import com.caspar.eservicemall.order.service.PayStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.AmqpAdmin;
@@ -16,13 +18,26 @@ import org.springframework.amqp.core.DirectExchange;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
+import com.caspar.eservicemall.common.constant.order.PaymentConstant.PayType;
 @Slf4j
 @SpringBootTest
 class EserviceOrderApplicationTests {
 
 	@Autowired
 	OmsOrderService orderService;
+
+
+
+
+    @Test
+    void testSpringUtil(){
+        // 获取实际策略对象
+        PayType payType=PayType.ALI_PAY;
+        PayStrategy payStrategy = SpringUtils.getBean(payType.getStrategyBeanId(), PayStrategy.class);
+        System.out.println("3333");
+    }
+
+
 	@Test
 	void contextLoads() {
 

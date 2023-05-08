@@ -5,11 +5,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 @SpringBootApplication
 @MapperScan("com/caspar/eservicemall/member/dao") //扫描mybatisplus实现类
 @EnableDiscoveryClient  //开启服务注册发现
 @EnableFeignClients("com/caspar/eservicemall/member/feign")  //开启远程过程调用扫描
+@EnableRedisHttpSession
 public class EserviceMemberApplication {
 
 	public static void main(String[] args) {

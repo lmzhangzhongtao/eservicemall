@@ -1,13 +1,13 @@
 package com.caspar.eservicemall.order.config;
 
-import com.zaxxer.hikari.HikariDataSource;
-import io.seata.rm.datasource.DataSourceProxy;
-import jakarta.activation.DataSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
+//import com.zaxxer.hikari.HikariDataSource;
+////import io.seata.rm.datasource.DataSourceProxy;
+//import jakarta.activation.DataSource;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.util.StringUtils;
 
 //   所有需要使用分布式事务的微服务使用Seata DataSourceProxy代理数据源
 //@Configuration

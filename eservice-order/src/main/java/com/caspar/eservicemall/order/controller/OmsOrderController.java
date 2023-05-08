@@ -90,4 +90,13 @@ public class OmsOrderController {
         OmsOrderEntity order = omsOrderService.getOrderByOrderSn(orderSn);
         return R.ok().setData(order);
     }
+    /**
+     * 分页查询订单列表、订单详情
+     */
+    @PostMapping("/listWithItem")
+    public R listWithItem(@RequestBody Map<String, Object> params) {
+        PageUtils page = omsOrderService.queryPageWithItem(params);
+
+        return R.ok().put("page", page);
+    }
 }

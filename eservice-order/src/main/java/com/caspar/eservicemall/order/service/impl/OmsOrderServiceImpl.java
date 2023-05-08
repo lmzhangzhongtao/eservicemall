@@ -17,14 +17,16 @@ import com.caspar.eservicemall.common.utils.R;
 import com.caspar.eservicemall.common.vo.MemberResponseVo;
 import com.caspar.eservicemall.order.entity.OmsOrderEntity;
 import com.caspar.eservicemall.order.entity.OmsOrderItemEntity;
+import com.caspar.eservicemall.order.entity.OmsPaymentInfoEntity;
 import com.caspar.eservicemall.order.feign.CartFeignService;
 import com.caspar.eservicemall.order.feign.MemberFeignService;
 import com.caspar.eservicemall.order.feign.ProductFeignService;
 import com.caspar.eservicemall.order.feign.WmsFeignService;
 import com.caspar.eservicemall.order.interceptor.LoginUserInterceptor;
+import com.caspar.eservicemall.order.service.OmsPaymentInfoService;
 import com.caspar.eservicemall.order.util.TokenUtil;
 import com.caspar.eservicemall.common.vo.order.*;
-import io.seata.spring.annotation.GlobalTransactional;
+//import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +74,8 @@ public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderDao, OmsOrderEntity
 
     @Autowired
     OmsOrderItemServiceImpl orderItemService;
-
+    @Autowired
+    OmsPaymentInfoService paymentInfoService;
     @Autowired
     RabbitTemplate rabbitTemplate;
     @Autowired
@@ -404,14 +407,78 @@ public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderDao, OmsOrderEntity
             updateById(temp);
 
             try {
+                //需要保证消息一定会发送出去，消息可靠性
                 // 发送消息给MQ
                 OrderTO orderTO = new OrderTO();
                 BeanUtils.copyProperties(orderTO, _order);
                 //TODO 持久化消息到mq_message表中，并设置消息状态为3-已抵达（保存日志记录）
                 rabbitTemplate.convertAndSend("order-event-exchange", "order.release.other", orderTO);
             } catch (Exception e) {
-                // TODO 消息为抵达Broker，修改mq_message消息状态为2-错误抵达
+                // TODO 消息未抵达Broker，修改mq_message消息状态为2-错误抵达
             }
         }
+    }
+    /**
+     * 获取订单支付的详细信息
+     *
+     * @param orderSn 订单号
+     */
+    @Override
+    public PayVO getOrderPay(String orderSn) {
+        // 查询订单
+        OmsOrderEntity order = this.getOrderByOrderSn(orderSn);
+        // 查询所有订单项
+        OmsOrderItemEntity item = orderItemService.list(new QueryWrapper<OmsOrderItemEntity>()
+                .eq("order_sn", orderSn)).get(0);
+        PayVO result = new PayVO();
+        BigDecimal amount = order.getPayAmount().setScale(2, BigDecimal.ROUND_UP);// 总金额
+        result.setTotal_amount(amount.toString());
+        result.setOut_trade_no(orderSn);
+        result.setSubject(item.getSkuName());
+        result.setBody(item.getSkuAttrsVals());
+        return result;
+    }
+
+    /**
+     * 处理支付回调
+     *
+     * @param targetOrderStatus 目标状态
+     */
+    @Override
+    public void handlePayResult(Integer targetOrderStatus, Integer payCode, OmsPaymentInfoEntity paymentInfo) {
+        // 保存交易流水信息
+        paymentInfoService.save(paymentInfo);
+        // 修改订单状态
+        if (OrderConstant.OrderStatusEnum.PAYED.getCode().equals(targetOrderStatus)) {
+            // 支付成功状态
+            String orderSn = paymentInfo.getOrderSn();
+            baseMapper.updateOrderStatus(orderSn, targetOrderStatus, payCode);
+        }
+    }
+
+    /**
+     * 分页查询订单列表、订单详情
+     */
+    @Override
+    public PageUtils queryPageWithItem(Map<String, Object> params) {
+        // 获取登录用户
+        MemberResponseVo member = LoginUserInterceptor.loginUser.get();
+
+        // 查询订单
+        IPage<OmsOrderEntity> page = this.page(
+                new Query<OmsOrderEntity>().getPage(params),
+                new QueryWrapper<OmsOrderEntity>()
+                        .eq("member_id", member.getId())
+                        .orderByDesc("create_time"));
+        // 查询订单项
+        List<String> orderSns = page.getRecords().stream().map(order -> order.getOrderSn()).collect(Collectors.toList());
+        Map<String, List<OmsOrderItemEntity>> itemMap = orderItemService.list(new QueryWrapper<OmsOrderItemEntity>()
+                        .in("order_sn", orderSns))
+                .stream().collect(Collectors.groupingBy(OmsOrderItemEntity::getOrderSn));
+
+        // 遍历封装订单项
+        page.getRecords().forEach(order -> order.setOrderItemEntityList(itemMap.get(order.getOrderSn())));
+
+        return new PageUtils(page);
     }
 }
