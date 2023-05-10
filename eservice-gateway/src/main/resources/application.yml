@@ -20,6 +20,14 @@ spring:
           filters:
             - RewritePath=/api/product/(?<segment>.*),/product/$\{segment}
 
+        - id: coupon_route
+          uri: lb://eservice-coupon
+          predicates:
+            - Path=/api/coupon/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+
 
          ### 第三方服务路由
          ##路由转换 http://localhost:88/api/thirdparty/oss/policy  => http://localhost:30000/oss/policy
@@ -83,3 +91,8 @@ spring:
           uri: lb://eservice-member
           predicates:
             - Host=member.eservicemall.com
+
+        - id: eservicemall_seckill_route
+          uri: lb://eservice-seckill
+          predicates:
+            - Host=seckill.eservicemall.com

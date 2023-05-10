@@ -3,6 +3,7 @@ package com.caspar.eservicemall.product.app;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -92,5 +93,14 @@ public class SkuInfoController {
     public Map<Long, BigDecimal> getPrice(@RequestBody Collection<Long> skuIds) {
         return skuInfoService.getByIds(skuIds).stream()
                 .collect(Collectors.toMap(SkuInfoEntity::getSkuId, SkuInfoEntity::getPrice));
+    }
+
+    /**
+     * 查询商品集合
+     */
+    @PostMapping("/infos")
+    public R infos(@RequestBody List<Long> skuIds) {
+        List<SkuInfoEntity> skuInfos = skuInfoService.getByIds(skuIds);
+        return R.ok().setData(skuInfos);
     }
 }

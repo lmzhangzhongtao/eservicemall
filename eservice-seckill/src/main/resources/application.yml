@@ -1,0 +1,27 @@
+server:
+  port: 25000
+
+spring:
+  application:
+    name: eservice-seckill
+  session:
+    store-type: redis     #SpringSession的保存方式
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  main:
+    allow-circular-references: true  #允许循环引用
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  thymeleaf:
+    cache: false    ## 关闭缓存
+  data:
+    redis:
+      host: 192.168.218.2
+      port: 6379
+  rabbitmq:
+    host: 192.168.218.2
+    port: 5672
+    # 虚拟主机
+    virtual-host: /

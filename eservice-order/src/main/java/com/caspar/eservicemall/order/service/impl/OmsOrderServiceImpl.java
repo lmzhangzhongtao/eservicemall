@@ -8,10 +8,12 @@ import com.caspar.eservicemall.common.entity.order.OmsCommonOrderEntity;
 import com.caspar.eservicemall.common.entity.order.OmsCommonOrderItemEntity;
 import com.caspar.eservicemall.common.exception.NoStockException;
 import com.caspar.eservicemall.common.exception.VerifyPriceException;
+import com.caspar.eservicemall.common.to.mq.SeckillOrderTO;
 import com.caspar.eservicemall.common.to.order.OrderCreateTO;
 import com.caspar.eservicemall.common.to.order.OrderTO;
 import com.caspar.eservicemall.common.to.order.SpuInfoTO;
 import com.caspar.eservicemall.common.to.order.WareSkuLockTO;
+import com.caspar.eservicemall.common.to.seckill.SeckillOrderTo;
 import com.caspar.eservicemall.common.to.ware.SkuHasStockTO;
 import com.caspar.eservicemall.common.utils.R;
 import com.caspar.eservicemall.common.vo.MemberResponseVo;
@@ -480,5 +482,41 @@ public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderDao, OmsOrderEntity
         page.getRecords().forEach(order -> order.setOrderItemEntityList(itemMap.get(order.getOrderSn())));
 
         return new PageUtils(page);
+    }
+
+    /**
+     * 创建秒杀订单
+     * @param order 秒杀订单信息
+     */
+    @Override
+    public void createSeckillOrder(SeckillOrderTo order) {
+        // 1.创建订单
+        OmsOrderEntity orderEntity = new OmsOrderEntity();
+        orderEntity.setOrderSn(order.getOrderSn());
+        orderEntity.setMemberId(order.getMemberId());
+        orderEntity.setCreateTime(new Date());
+        BigDecimal totalPrice = order.getSeckillPrice().multiply(BigDecimal.valueOf(order.getNum()));// 应付总额
+        orderEntity.setTotalAmount(totalPrice);// 订单总额
+        orderEntity.setPayAmount(totalPrice);// 应付总额
+        orderEntity.setStatus(OrderConstant.OrderStatusEnum.CREATE_NEW.getCode());
+        // 保存订单
+        this.save(orderEntity);
+
+        // 2.创建订单项信息
+        OmsOrderItemEntity orderItem = new OmsOrderItemEntity();
+        orderItem.setOrderSn(order.getOrderSn());
+        orderItem.setRealAmount(totalPrice);
+        orderItem.setSkuQuantity(order.getNum());
+
+        // 保存商品的spu信息
+        R r = productFeignService.getSpuInfoBySkuId(order.getSkuId());
+        SpuInfoTO spuInfo = r.getData(new TypeReference<SpuInfoTO>() {
+        });
+        orderItem.setSpuId(spuInfo.getId());
+        orderItem.setSpuName(spuInfo.getSpuName());
+        orderItem.setSpuBrand(spuInfo.getBrandName());
+        orderItem.setCategoryId(spuInfo.getCatalogId());
+        // 保存订单项数据
+        orderItemService.save(orderItem);
     }
 }

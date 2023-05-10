@@ -6,7 +6,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-//@FeignClient(value = "eservicemall-seckill", fallback = SeckillFeignServiceFallBack.class,
+@FeignClient("eservice-seckill")
+//@FeignClient(value = "gulimall-seckill", fallback = SeckillFeignServiceFallBack.class,
 //        configuration = SeckillFeignServiceFallBack.class)
 public interface SeckillFeignService {
 

@@ -1,15 +1,12 @@
 package com.caspar.eservicemall.coupon.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.caspar.eservicemall.coupon.entity.SeckillSessionEntity;
 import com.caspar.eservicemall.coupon.service.SeckillSessionService;
@@ -86,5 +83,12 @@ public class SeckillSessionController {
 
         return R.ok();
     }
-
+    /**
+     * 查询最近三天需要秒杀的场次+商品
+     */
+    @GetMapping(value = "/lates3DaySession")
+    public R getLates3DaySession() {
+        List<SeckillSessionEntity> seckillSessionEntities = seckillSessionService.getLates3DaySession();
+        return R.ok().setData(seckillSessionEntities);
+    }
 }

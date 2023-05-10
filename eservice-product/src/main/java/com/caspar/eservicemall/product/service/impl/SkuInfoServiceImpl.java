@@ -45,8 +45,8 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
     SpuInfoDescService spuInfoDescService;
     @Autowired
     AttrGroupServiceImpl attrGroupService;
-//    @Autowired
-//    SeckillFeignService seckillFeignService;
+    @Autowired
+    SeckillFeignService seckillFeignService;
 
     @Autowired
     SkuSaleAttrValueService skuSaleAttrValueService;
@@ -127,15 +127,15 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
             List<SkuImagesEntity> images = skuImagesService.getImagesBySkuId(skuId);
             result.setImages(images);
         }, executor);
-//        CompletableFuture<Void> seckillSkuFuture = CompletableFuture.runAsync(() -> {
-//            // 3.查询当前商品是否参与秒杀优惠
-//            R r = seckillFeignService.getSkuSeckilInfo(skuId);
-//            if (r.getCode() == 0) {
-//                SeckillSkuVO seckillSku = r.getData(new TypeReference<SeckillSkuVO>() {
-//                });
-//                result.setSeckillSku(seckillSku);
-//            }
-//        }, executor);
+        CompletableFuture<Void> seckillSkuFuture = CompletableFuture.runAsync(() -> {
+            // 3.查询当前商品是否参与秒杀优惠
+            R r = seckillFeignService.getSkuSeckilInfo(skuId);
+            if (r.getCode() == 0) {
+                SeckillSkuVO seckillSku = r.getData(new TypeReference<SeckillSkuVO>() {
+                });
+                result.setSeckillSku(seckillSku);
+            }
+        }, executor);
 
 
         CompletableFuture<Void> saleAttrFuture = skuInfoFuture.thenAcceptAsync((skuInfo) -> {
@@ -156,7 +156,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
             result.setGroupAttrs(groupAttrs);
         }, executor);
         // 等待所有任务都完成  skuInfoFuture不需要判断,因别的几个任务都是需要它完成才进行执行
-        CompletableFuture.allOf(imagesFuture, saleAttrFuture, descFuture, groupAttrsFuture).get();
+        CompletableFuture.allOf(imagesFuture,seckillSkuFuture,saleAttrFuture, descFuture, groupAttrsFuture).get();
         // TODo 秒杀的暂时未处理
      //   CompletableFuture.allOf(imagesFuture, saleAttrFuture, descFuture, groupAttrsFuture, seckillSkuFuture).get();
         return result;

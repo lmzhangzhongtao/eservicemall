@@ -2,6 +2,8 @@ package com.caspar.eservicemall.order.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.caspar.eservicemall.common.entity.order.OmsCommonOrderEntity;
+import com.caspar.eservicemall.common.to.mq.SeckillOrderTO;
+import com.caspar.eservicemall.common.to.seckill.SeckillOrderTo;
 import com.caspar.eservicemall.common.utils.PageUtils;
 import com.caspar.eservicemall.common.vo.order.OrderConfirmVO;
 import com.caspar.eservicemall.common.vo.order.OrderSubmitVO;
@@ -39,5 +41,7 @@ public interface OmsOrderService extends IService<OmsOrderEntity> {
     void handlePayResult(Integer orderStatus, Integer payCode, OmsPaymentInfoEntity paymentInfo);
 
     PageUtils queryPageWithItem(Map<String, Object> params);
+
+    public void createSeckillOrder(SeckillOrderTo order);
 }
 
