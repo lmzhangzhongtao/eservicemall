@@ -39,6 +39,12 @@
             <artifactId>SpringUtils</artifactId>
             <version>1.0.1</version>
         </dependency>
+		<!--        Sentinel网关限流-->
+		<dependency>
+			<groupId>com.alibaba.cloud</groupId>
+			<artifactId>spring-cloud-alibaba-sentinel-gateway</artifactId>
+			<version>2022.0.0.0-RC1</version>
+		</dependency>
     </dependencies>
 	<dependencyManagement>
 		<dependencies>

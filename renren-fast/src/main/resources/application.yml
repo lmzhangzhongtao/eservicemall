@@ -48,6 +48,8 @@ spring:
       discovery:
         server-addr: localhost:8848
 
+  #spring.cloud.sentinel.transport.dashboard=localhost:8333
+  #spring.cloud.sentinel.transport.port=8719  //控制台与后端微服务之间传输数据的端口
 #mybatis
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
@@ -81,3 +83,6 @@ renren:
     # token有效时长，7天，单位秒
     expire: 604800
     header: token
+
+
+

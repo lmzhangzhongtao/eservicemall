@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -67,6 +69,21 @@ public class SeckillController {
             e.printStackTrace();
         }
         return "success";
+    }
+
+    public static void main(String[] args) {
+        HashMap<String,String> map=new HashMap<>();  //线程不安全
+//    public V put(K key, V value) {
+//        return putVal(hash(key), key, value, false, true);
+//    }
+        map.put("hashmapTest","1");
+//    public synchronized V put(K key, V value) {
+//        // Make sure the value is not null
+//        if (value == null) {
+//            throw new NullPointerException();
+//        }
+        Hashtable<String,String> table=new Hashtable<>(); //线程安全
+        table.put("test","wqw");
     }
 
 }

@@ -6,9 +6,10 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient("eservice-seckill")
-//@FeignClient(value = "gulimall-seckill", fallback = SeckillFeignServiceFallBack.class,
-//        configuration = SeckillFeignServiceFallBack.class)
+//@FeignClient("eservice-seckill")
+@FeignClient(value = "eservice-seckill", fallback = SeckillFeignServiceFallBack.class,
+        configuration = SeckillFeignServiceFallBack.class)
+//远程调用失败返回的配置类 fallback = SeckillFeignServiceFallBack.class
 public interface SeckillFeignService {
 
 
